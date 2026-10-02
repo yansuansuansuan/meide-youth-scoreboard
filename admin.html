@@ -66,8 +66,18 @@
         <div class="quick"><button type="button" data-p="1">+1</button><button type="button" data-p="5">+5</button><button type="button" data-p="10">+10</button></div>
         <input id="points" type="number" class="admin-input" value="5">
 
-        <label for="reason">原因</label>
-        <input id="reason" class="admin-input" placeholder="例如：完成公益实践任务">
+        <label for="reason">原因 <span style="font-weight:400;color:var(--sub);font-size:13px">（可选）</span></label>
+        <input id="reason" class="admin-input" list="reasonOptions" placeholder="可不填，也可以选择常用原因">
+        <datalist id="reasonOptions">
+          <option value="完成公益实践任务"></option>
+          <option value="积极参与活动"></option>
+          <option value="团队合作表现良好"></option>
+          <option value="完成亲子协作任务"></option>
+          <option value="完成成长挑战"></option>
+          <option value="主动帮助他人"></option>
+          <option value="现场表现积极"></option>
+          <option value="积分调整"></option>
+        </datalist>
 
         <label for="operator">操作人</label>
         <input id="operator" class="admin-input" placeholder="例如：周老师">
@@ -131,7 +141,7 @@
         box.innerHTML='<div class="emptybox"><img src="assets/no_photo.png" alt=""><div>暂无待提交积分</div></div>';
         return;
       }
-      box.innerHTML=pending.map((e,i)=>`<div class="item"><b class="a">${esc(childById(e.childId)?.name||e.childId)}</b><span class="b meta">${esc(activityById(e.activityId)?.title||e.activityId)}</span><span class="c" style="font-weight:900;color:var(--green2)">${e.points>=0?'+':''}${e.points} 分</span><span class="d meta">${esc(e.reason)} · ${esc(e.operator)}</span><button data-del="${i}">删除</button></div>`).join('');
+      box.innerHTML=pending.map((e,i)=>`<div class="item"><b class="a">${esc(childById(e.childId)?.name||e.childId)}</b><span class="b meta">${esc(activityById(e.activityId)?.title||e.activityId)}</span><span class="c" style="font-weight:900;color:var(--green2)">${e.points>=0?'+':''}${e.points} 分</span><span class="d meta">${e.reason?esc(e.reason)+' · ':''}${esc(e.operator)}</span><button data-del="${i}">删除</button></div>`).join('');
       box.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{pending.splice(Number(b.dataset.del),1);save()});
     }
 
@@ -169,7 +179,6 @@
         const reason=$('#reason').value.trim();
         const operator=$('#operator').value.trim();
         if(!points){toast('请输入积分');return}
-        if(!reason){toast('请填写原因');return}
         if(!operator){toast('请填写操作人');return}
 
         pending.push({
