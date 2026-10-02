@@ -39,40 +39,37 @@ function homePage(){return `
   </div>
 </section>`}
 function rankingPage(kind='total'){
-  const isActivity=kind==='activity'; const activityId=isActivity?state.selectedActivity:null; const rows=totals(activityId); const act=byId(state.activities,activityId);
-  const headPc=isActivity?'assets/activity_pc_head.png':'assets/total_pc_head.png';
-  const headM=isActivity?'assets/activity_mobile_head.png':'assets/total_mobile_head.png';
-  const titleImg=isActivity?'assets/activity_title.png':'assets/total_title.png';
-  const subImg=isActivity?'assets/crown_badge.png':'assets/total_subtitle.png';
-  const titleText=isActivity?(act?`${fmtDate(act.date)} · ${act.title}`:'按单场活动查看积分排名'):'累计成长积分总榜';
+  const isActivity=kind==='activity';
+  const activityId=isActivity?state.selectedActivity:null;
+  const rows=totals(activityId);
+  const act=byId(state.activities,activityId);
+  const headBg=isActivity?'assets/activity_pc_head.png':'assets/total_pc_head.png';
+  const titleImg=isActivity?'assets/activity_title_badge.png':'assets/total_title.png';
+  const subImg='assets/total_subtitle.png';
+  const activityLabel=act?`${fmtDate(act.date)} · ${act.title}`:'请选择活动';
   return `
-  <section class="page-shell">
-    <div class="banner-wrap">
-      <img class="banner-desktop" src="${headPc}" alt="${isActivity?'活动榜':'总榜'}头图">
-      <img class="banner-mobile" src="${headM}" alt="${isActivity?'活动榜':'总榜'}头图">
+  <section class="page-shell ${isActivity?'activity-page':'total-page'}">
+    <div class="banner-wrap ranking-hero ${isActivity?'activity-hero':'total-hero'}">
+      <img class="banner-desktop" src="${headBg}" alt="${isActivity?'活动榜':'总榜'}头图">
+      <img class="banner-mobile" src="${headBg}" alt="${isActivity?'活动榜':'总榜'}头图">
+      <div class="hero-overlay ${isActivity?'activity':''}">
+        <img class="hero-title-image ${isActivity?'activity':''}" src="${titleImg}" alt="${isActivity?'活动榜':'总榜'}标题">
+        ${!isActivity?`<img class="hero-sub-image" src="${subImg}" alt="点滴积累 看见成长">`:''}
+      </div>
     </div>
     <div class="ranking-bg">
       <div class="ranking-card">
-        <div class="ranking-head">
-          <div class="ranking-title-area">
-            <img class="icon" src="assets/trophy_icon.png" alt="">
-            <div class="ranking-title-text">
-              <img src="${titleImg}" alt="${isActivity?'活动榜':'总榜'}标题">
-              <img class="subimg" src="${subImg}" alt="副标题">
-              <div class="meta" style="margin-top:8px">${esc(titleText)}</div>
-            </div>
-          </div>
-          <div class="toolbar">
-            ${isActivity?`<select id="actSel" class="select">${state.activities.map(a=>`<option value="${a.id}" ${a.id===activityId?'selected':''}>${esc(fmtDate(a.date)+' '+a.title)}</option>`).join('')}</select>`:''}
-            <input id="searchInput" class="search" placeholder="搜索孩子姓名">
-          </div>
+        <div class="ranking-toolbar-top ${isActivity?'activity':''}">
+          ${isActivity?`<select id="actSel" class="select activity-select">${state.activities.map(a=>`<option value="${a.id}" ${a.id===activityId?'selected':''}>${esc(fmtDate(a.date)+' '+a.title)}</option>`).join('')}</select>`:''}
+          ${isActivity?`<div class="activity-meta-line">${esc(activityLabel)}</div>`:`<div class="activity-meta-line total-meta-line">汇总全部活动积分流水</div>`}
         </div>
         ${podiumHtml(rows.slice(0,3))}
+        <div class="search-row"><input id="searchInput" class="search long-search" placeholder="搜索孩子姓名"></div>
         <div class="table-wrap">${tableHtml(rows)}</div>
       </div>
       <div class="ranking-footer">
         <img class="footer-desktop" src="assets/footer_slogan.png" alt="尾图">
-        <img class="footer-mobile" src="assets/mobile_tail.png" alt="尾图">
+        <img class="footer-mobile" src="assets/mobile_tail_cropped.webp" alt="尾图">
       </div>
     </div>
   </section>`}
