@@ -39,43 +39,59 @@ function homePage(){return `
   </div>
 </section>`}
 function rankingPage(kind='total'){
-  const isActivity=kind==='activity'; const activityId=isActivity?state.selectedActivity:null; const rows=totals(activityId); const act=byId(state.activities,activityId);
+  const isActivity=kind==='activity';
+  const activityId=isActivity?state.selectedActivity:null;
+  const rows=totals(activityId);
+  const act=byId(state.activities,activityId);
   const headPc=isActivity?'assets/activity_pc_head.png':'assets/total_pc_head.png';
   const headM=isActivity?'assets/activity_mobile_head.png':'assets/total_mobile_head.png';
-  const titleImg=isActivity?'assets/board_title.png':'assets/total_title.png';
-  const subImg=isActivity?'assets/crown_badge.png':'assets/total_subtitle.png';
-  const titleText=isActivity?(act?`${fmtDate(act.date)} · ${act.title}`:'按单场活动查看积分排名'):'累计成长积分总榜';
+  const heroTitle=isActivity?'美德少年活动积分榜':'美德少年成长积分榜';
+  const heroSub=isActivity?'活动积分 · 实时更新':'点滴积累 · 看见成长';
+  const contextTitle=isActivity
+    ? (act?`${fmtDate(act.date)} · ${act.title}`:'请选择活动')
+    : '累计成长积分总榜';
+
   return `
   <section class="page-shell">
-    <div class="banner-wrap">
-      <img class="banner-desktop" src="${headPc}" alt="${isActivity?'活动榜':'总榜'}头图">
-      <img class="banner-mobile" src="${headM}" alt="${isActivity?'活动榜':'总榜'}头图">
+    <div class="banner-wrap ${isActivity?'activity-banner':'total-banner'}">
+      <img class="banner-desktop" src="${headPc}" alt="${heroTitle}">
+      <img class="banner-mobile" src="${headM}" alt="${heroTitle}">
+      <div class="banner-copy">
+        ${isActivity
+          ? `<div class="hero-title-text">${heroTitle}</div><div class="hero-title-sub">${heroSub}</div>`
+          : `<img class="hero-title-image" src="assets/total_title.png" alt="${heroTitle}"><div class="hero-title-sub">${heroSub}</div>`
+        }
+      </div>
     </div>
+
     <div class="ranking-bg">
       <div class="ranking-card">
         <div class="ranking-head">
-          <div class="ranking-title-area">
-            <img class="icon" src="assets/trophy_icon.png" alt="">
-            <div class="ranking-title-text">
-              <img src="${titleImg}" alt="${isActivity?'活动榜':'总榜'}标题">
-              <img class="subimg" src="${subImg}" alt="副标题">
-              <div class="meta" style="margin-top:8px">${esc(titleText)}</div>
+          <div class="ranking-context">
+            <span class="rank-mode-pill">${isActivity?'活动榜':'总榜'}</span>
+            <div>
+              <strong class="ranking-context-title">${esc(contextTitle)}</strong>
+              <div class="meta">${isActivity?'仅统计本场活动积分':'汇总全部活动积分流水'}</div>
             </div>
           </div>
+
           <div class="toolbar">
             ${isActivity?`<select id="actSel" class="select">${state.activities.map(a=>`<option value="${a.id}" ${a.id===activityId?'selected':''}>${esc(fmtDate(a.date)+' '+a.title)}</option>`).join('')}</select>`:''}
             <input id="searchInput" class="search" placeholder="搜索孩子姓名">
           </div>
         </div>
+
         ${podiumHtml(rows.slice(0,3))}
         <div class="table-wrap">${tableHtml(rows)}</div>
       </div>
+
       <div class="ranking-footer">
-        <img class="footer-desktop" src="assets/footer_slogan.png" alt="尾图">
-        <img class="footer-mobile" src="assets/mobile_tail.png" alt="尾图">
+        <img class="footer-desktop" src="assets/footer_slogan.png" alt="成长寄语">
+        <img class="footer-mobile" src="assets/mobile_tail.png" alt="成长寄语">
       </div>
     </div>
-  </section>`}
+  </section>`
+}
 function podiumHtml(rows){const order=[1,0,2],cls=['second','first','third']; return `<div class="podium">${order.map((idx,i)=>{const r=rows[idx]; if(!r)return '<div></div>'; return `<div class="podium-item ${cls[i]}"><div class="medal">${idx+1}</div><img class="avatar" src="${avatarOf(r.child)}" alt=""><strong>${esc(r.child.name)}</strong><div class="p-score">${r.points} 分</div><div class="p-meta">参与 ${r.activities} 场活动</div></div>`}).join('')}</div>`}
 function tableHtml(rows){ if(!rows.length) return `<div class="empty"><img src="assets/no_photo.png" alt=""><div>暂时还没有积分记录</div></div>`; return `<table class="rank-table"><thead><tr><th>排名</th><th>姓名</th><th>参与活动</th><th>积分</th></tr></thead><tbody>${rows.map((r,i)=>`<tr data-name="${esc(r.child.name)}"><td><span class="rank-num">${String(i+1).padStart(2,'0')}</span></td><td>${esc(r.child.name)}</td><td>参加 ${r.activities} 场</td><td class="score">${r.points} 分</td></tr>`).join('')}</tbody></table>`}
 function profilePage(){const child=byId(state.children,state.selectedChild)||state.children[0]; if(!child)return ''; const entries=state.ledger.filter(x=>x.childId===child.id).sort((a,b)=>String(b.date).localeCompare(String(a.date))); const total=entries.reduce((s,e)=>s+(+e.points||0),0); const acts=new Set(entries.map(x=>x.activityId)).size; return `
