@@ -58,10 +58,7 @@ function rankingPage(kind='total'){
       <img class="banner-mobile" src="${headM}" alt="${heroTitle}">
       <div class="banner-copy">
         ${isActivity
-          ? `<div class="activity-title-ui" aria-label="${heroTitle}">
-               <div class="activity-title-main"><span>美德少年</span><strong>活动积分榜</strong></div>
-               <div class="activity-title-ribbon">每一次参与，都是成长的加分项</div>
-             </div>`
+          ? `<img class="hero-title-image activity-title-image" src="assets/activity_title_badge.webp?v=20261002d" alt="${heroTitle}">`
           : `<img class="hero-title-image" src="assets/total_title.png?v=20261002c" alt="${heroTitle}"><div class="hero-title-sub">${heroSub}</div>`
         }
       </div>
