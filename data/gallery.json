@@ -1,5 +1,26 @@
 [
-  {"title":"10.7 公益社会实践活动","date":"2026-10-07","cover":"assets/photo_placeholder.png","desc":"活动结束后可替换为正式精选照片。"},
-  {"title":"国庆童行·益起向未来","date":"2026-10-01","cover":"assets/photo_placeholder.png","desc":"这里可以继续补充往期精彩图集。"},
-  {"title":"亲子成长社会实践挑战","date":"2026-09-20","cover":"assets/photo_placeholder.png","desc":"管理员后续可直接替换封面和文案。"}
+  {
+    "id":"2026-10-07",
+    "title":"10.7 公益社会实践活动",
+    "date":"2026-10-07",
+    "cover":"assets/photo_placeholder.png",
+    "desc":"活动结束后上传精选照片，点击进入相册查看。",
+    "photos":[]
+  },
+  {
+    "id":"2026-10-01",
+    "title":"国庆童行·益起向未来",
+    "date":"2026-10-01",
+    "cover":"assets/photo_placeholder.png",
+    "desc":"活动结束后上传精选照片，点击进入相册查看。",
+    "photos":[]
+  },
+  {
+    "id":"2026-09-20",
+    "title":"亲子成长社会实践挑战",
+    "date":"2026-09-20",
+    "cover":"assets/photo_placeholder.png",
+    "desc":"活动结束后上传精选照片，点击进入相册查看。",
+    "photos":[]
+  }
 ]
