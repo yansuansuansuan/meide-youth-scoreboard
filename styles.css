@@ -714,3 +714,20 @@ img{display:block;max-width:100%}
 @media(max-width:520px){
   .album-photo-grid{grid-template-columns:1fr 1fr}
 }
+
+
+/* Activity leaderboard final badge image */
+@media (min-width:821px){
+  .activity-banner .banner-copy{
+    width:min(760px,53vw)!important;
+    top:50%!important;
+  }
+  .activity-title-image{
+    display:block!important;
+    width:min(720px,100%)!important;
+    max-height:330px;
+    object-fit:contain;
+    margin:0 auto!important;
+    filter:drop-shadow(0 14px 24px rgba(126,43,18,.24));
+  }
+}
