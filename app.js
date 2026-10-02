@@ -107,15 +107,123 @@ function profilePage(){const child=byId(state.children,state.selectedChild)||sta
   </div></div>
 </section>`}
 function introPage(){return `<section><div class="section-hero"><div class="container"><h1>系列活动介绍</h1><p>让孩子在公益、实践、协作与表达中，看见自己一步步的成长。</p></div></div><div class="content-pad"><div class="container intro-grid"><article class="card"><h2>什么是美德少年成长积分榜？</h2><p>这是一个用于记录系列活动参与情况的成长展示平台。每位孩子参加活动、完成任务、展现合作与责任，都会以“积分流水”的方式沉淀下来，最终自动汇总到总榜和活动榜中。</p><p>第一版平台以“公开展示 + 管理员统一维护”为主：公众可查看榜单和成长档案，管理员负责活动结束后录入积分、上传精选照片、更新报名入口。</p><div class="notice"><strong>当前建议使用方式</strong><p class="meta">活动现场照片直播可以继续使用喔图；网站主要负责长期沉淀积分、活动介绍、往期精彩和成长记录。</p></div></article><div class="point-list"><div class="point"><b>🌱 长期积累</b><div class="meta">每场活动积分自动汇总到总榜。</div></div><div class="point"><b>🏅 活动展示</b><div class="meta">每一场活动都能单独生成活动榜。</div></div><div class="point"><b>📒 成长档案</b><div class="meta">查看单个孩子的参与与积分流水。</div></div><div class="point"><b>📷 往期精彩</b><div class="meta">活动结束后上传精选照片长期保留。</div></div></div></div></div></section>`}
-function galleryPage(){return `<section><div class="section-hero"><div class="container"><h1>往期精彩</h1><p>活动现场先看喔图直播，活动结束后精选照片会整理到这里。</p></div></div><div class="content-pad"><div class="container"><div class="gallery-grid">${(state.gallery.length?state.gallery:[{title:'活动相册待更新',date:'',cover:'assets/photo_placeholder.png',desc:'管理员上传精选照片后，会在这里自动显示。'}]).map(g=>`<article class="photo-card"><div class="photo-thumb"><img src="${g.cover||'assets/photo_placeholder.png'}" alt=""></div><div class="photo-body"><h3>${esc(g.title)}</h3><p>${g.date?fmtDate(g.date)+' · ':''}${esc(g.desc||'活动精选照片')}</p></div></article>`).join('')}</div></div></div></section>`}
+function galleryPage(){
+  const albums=state.gallery.length?state.gallery:[];
+  const cards=albums.length?albums.map((g,index)=>{
+    const id=g.id||('album-'+index);
+    const photos=Array.isArray(g.photos)?g.photos:[];
+    const cover=g.cover||(photos[0]&&(photos[0].src||photos[0]))||'assets/photo_placeholder.png';
+    return `<a class="photo-card album-card-link" href="#/gallery/${encodeURIComponent(id)}">
+      <div class="photo-thumb"><img src="${esc(cover)}" alt="${esc(g.title||'活动相册')}" onerror="this.src='assets/photo_placeholder.png'"></div>
+      <div class="photo-body">
+        <div class="album-meta-row"><span class="album-date">${g.date?fmtDate(g.date):''}</span><span class="album-count">${photos.length} 张</span></div>
+        <h3>${esc(g.title||'活动相册')}</h3>
+        <p>${esc(g.desc||'点击进入查看活动精选照片')}</p>
+        <span class="album-open">查看相册 →</span>
+      </div>
+    </a>`;
+  }).join(''):`<div class="gallery-empty card"><img src="assets/no_photo.png" alt=""><h3>还没有往期相册</h3><p class="meta">活动结束后，管理员上传精选照片后会自动出现在这里。</p></div>`;
+
+  return `<section>
+    <div class="section-hero"><div class="container"><h1>往期精彩</h1><p>活动现场先看喔图直播，活动结束后精选照片会整理到这里。</p></div></div>
+    <div class="content-pad"><div class="container"><div class="gallery-grid">${cards}</div></div></div>
+  </section>`
+}
+
+function galleryDetailPage(albumId){
+  const album=state.gallery.find((g,index)=>(g.id||('album-'+index))===albumId);
+  if(!album){
+    return `<section><div class="section-hero"><div class="container"><h1>相册不存在</h1><p>这个相册可能已经被移动或删除。</p></div></div><div class="content-pad"><div class="container"><a class="btn btn-ghost" href="#/gallery">← 返回往期精彩</a></div></div></section>`;
+  }
+  const photos=Array.isArray(album.photos)?album.photos:[];
+  const photoHtml=photos.length?photos.map((p,index)=>{
+    const photo=typeof p==='string'?{src:p}:p;
+    const src=photo.src||'assets/photo_placeholder.png';
+    const caption=photo.caption||`第 ${index+1} 张`;
+    const children=Array.isArray(photo.children)?photo.children:[];
+    return `<button class="gallery-photo" type="button"
+      data-photo-src="${esc(src)}"
+      data-photo-caption="${esc(caption)}"
+      data-photo-children="${esc(children.join('、'))}">
+      <img src="${esc(src)}" alt="${esc(caption)}" onerror="this.src='assets/photo_placeholder.png'">
+      <span class="gallery-photo-overlay">查看大图</span>
+      ${children.length?`<span class="photo-tag">${esc(children.join('、'))}</span>`:''}
+    </button>`;
+  }).join(''):`<div class="album-empty">
+      <img src="assets/no_photo.png" alt="">
+      <h3>这场活动的精选照片还没上传</h3>
+      <p>等管理员把活动照片放进网站后，这里会自动显示。现场照片仍可通过喔图直播查看。</p>
+    </div>`;
+
+  return `<section>
+    <div class="section-hero"><div class="container">
+      <div class="album-back-row"><a class="btn btn-ghost" href="#/gallery">← 返回往期精彩</a></div>
+      <h1>${esc(album.title||'活动相册')}</h1>
+      <p>${album.date?fmtDate(album.date)+' · ':''}${esc(album.desc||'活动精选照片')}</p>
+    </div></div>
+    <div class="content-pad"><div class="container">
+      <div class="album-photo-grid">${photoHtml}</div>
+    </div></div>
+    <div class="photo-modal" id="photoModal" aria-hidden="true">
+      <button class="photo-modal-close" type="button" aria-label="关闭">×</button>
+      <div class="photo-modal-inner">
+        <img id="photoModalImg" src="" alt="">
+        <div class="photo-modal-info">
+          <strong id="photoModalCaption"></strong>
+          <div id="photoModalChildren" class="photo-modal-tags"></div>
+        </div>
+      </div>
+    </div>
+  </section>`
+}
 function signupPage(){return `<section><div class="section-hero"><div class="container"><h1>报名入口</h1><p>管理员可随时把新的公众号推文链接、喔图直播链接更新到这里。</p></div></div><div class="content-pad"><div class="container"><div class="card"><div class="notice"><strong>活动通知</strong><p class="meta">${esc(state.settings.announcement||'暂无新的活动通知')}</p></div><div style="height:18px"></div><h2>当前报名入口</h2><div class="link-row">${state.settings.registrationUrl?`<a class="btn btn-primary" target="_blank" rel="noopener" href="${esc(state.settings.registrationUrl)}">打开报名推文</a><button class="btn btn-ghost" data-copy="${esc(state.settings.registrationUrl)}">复制链接</button>`:'<span class="meta">当前暂无报名链接</span>'}</div><hr style="border:0;border-top:1px solid var(--line);margin:26px 0"><h2>喔图直播</h2><div class="link-row">${state.settings.photoLiveUrl?`<a class="btn btn-green" target="_blank" rel="noopener" href="${esc(state.settings.photoLiveUrl)}">打开喔图直播</a><button class="btn btn-ghost" data-copy="${esc(state.settings.photoLiveUrl)}">复制链接</button>`:'<span class="meta">当前暂无喔图直播链接</span>'}</div></div></div></div></section>`}
 function bindPage(routeName){
   $$('.nav a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')===`#/${routeName}`));
   const input=$('#searchInput'); if(input){input.oninput=()=>$$('.rank-table tbody tr').forEach(tr=>tr.style.display=!input.value||tr.dataset.name.includes(input.value)?'':'none')}
   const sel=$('#actSel'); if(sel){sel.onchange=()=>{state.selectedActivity=sel.value; render()}}
   $$('[data-child]').forEach(b=>b.onclick=()=>{state.selectedChild=b.dataset.child; render()})
-  $$('[data-copy]').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.copy);toast('链接已复制')}catch(e){toast('复制失败，请手动复制')}})
+  $('[data-copy]').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.copy);toast('链接已复制')}catch(e){toast('复制失败，请手动复制')}})
+
+  const modal=$('#photoModal');
+  if(modal){
+    const modalImg=$('#photoModalImg');
+    const modalCaption=$('#photoModalCaption');
+    const modalChildren=$('#photoModalChildren');
+    $('.gallery-photo').forEach(btn=>btn.onclick=()=>{
+      modalImg.src=btn.dataset.photoSrc||'assets/photo_placeholder.png';
+      modalCaption.textContent=btn.dataset.photoCaption||'活动照片';
+      const tags=btn.dataset.photoChildren||'';
+      modalChildren.textContent=tags?('照片中的小朋友：'+tags):'';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    });
+    const close=()=>{
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    };
+    const closeBtn=$('.photo-modal-close');
+    if(closeBtn) closeBtn.onclick=close;
+    modal.onclick=e=>{if(e.target===modal) close();};
+    document.onkeydown=e=>{if(e.key==='Escape'&&modal.classList.contains('open')) close();};
+  }
 }
-function render(){const route=(location.hash||'#/home').replace(/^#\//,''); const app=$('#app'); const pages={home:homePage,total:()=>rankingPage('total'),activity:()=>rankingPage('activity'),profile:profilePage,intro:introPage,gallery:galleryPage,signup:signupPage}; app.innerHTML=(pages[route]||pages.home)(); bindPage(route); window.scrollTo({top:0,behavior:'instant'})}
+function render(){
+  const raw=(location.hash||'#/home').replace(/^#\//,'');
+  const parts=raw.split('/').filter(Boolean);
+  const route=parts[0]||'home';
+  const param=parts[1]?decodeURIComponent(parts[1]):null;
+  const app=$('#app');
+  let html='';
+  if(route==='gallery' && param) html=galleryDetailPage(param);
+  else{
+    const pages={home:homePage,total:()=>rankingPage('total'),activity:()=>rankingPage('activity'),profile:profilePage,intro:introPage,gallery:galleryPage,signup:signupPage};
+    html=(pages[route]||pages.home)();
+  }
+  app.innerHTML=html;
+  bindPage(route);
+  window.scrollTo({top:0,behavior:'instant'});
+}
 window.addEventListener('hashchange',render);
 document.addEventListener('DOMContentLoaded', async()=>{ $('#menuBtn').onclick=()=>$('#nav').classList.toggle('open'); await loadData(); render(); });
