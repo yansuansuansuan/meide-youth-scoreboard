@@ -58,7 +58,7 @@ function rankingPage(kind='total'){
       <img class="banner-mobile" src="${headM}" alt="${heroTitle}">
       <div class="banner-copy">
         ${isActivity
-          ? `<div class="hero-title-text">${heroTitle}</div><div class="hero-title-sub">${heroSub}</div>`
+          ? `<img class="hero-title-image activity-title-image" src="assets/activity_title.webp" alt="${heroTitle}">`
           : `<img class="hero-title-image" src="assets/total_title.png" alt="${heroTitle}"><div class="hero-title-sub">${heroSub}</div>`
         }
       </div>
