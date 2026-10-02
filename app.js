@@ -66,22 +66,18 @@ function rankingPage(kind='total'){
 
     <div class="ranking-bg">
       <div class="ranking-card">
-        <div class="ranking-head">
-          <div class="ranking-context">
-            <span class="rank-mode-pill">${isActivity?'活动榜':'总榜'}</span>
-            <div>
-              <strong class="ranking-context-title">${esc(contextTitle)}</strong>
-              <div class="meta">${isActivity?'仅统计本场活动积分':'汇总全部活动积分流水'}</div>
-            </div>
+        ${isActivity ? `
+          <div class="activity-filter-row">
+            <select id="actSel" class="select activity-select">${state.activities.map(a=>`<option value="${a.id}" ${a.id===activityId?'selected':''}>${esc(fmtDate(a.date)+' '+a.title)}</option>`).join('')}</select>
           </div>
-
-          <div class="toolbar">
-            ${isActivity?`<select id="actSel" class="select">${state.activities.map(a=>`<option value="${a.id}" ${a.id===activityId?'selected':''}>${esc(fmtDate(a.date)+' '+a.title)}</option>`).join('')}</select>`:''}
-            <input id="searchInput" class="search" placeholder="搜索孩子姓名">
-          </div>
-        </div>
+        ` : ''}
 
         ${podiumHtml(rows.slice(0,3))}
+
+        <div class="ranking-search-row">
+          <input id="searchInput" class="search ranking-search" placeholder="搜索孩子姓名">
+        </div>
+
         <div class="table-wrap">${tableHtml(rows)}</div>
       </div>
 
