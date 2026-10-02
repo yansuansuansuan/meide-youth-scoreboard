@@ -1,0 +1,8 @@
+[
+  {"id":"l001","childId":"c001","activityId":"a001","points":35,"reason":"完成公益实践任务","operator":"示例管理员","date":"2026-10-07","createdAt":"2026-10-07T18:30:00+08:00"},
+  {"id":"l002","childId":"c002","activityId":"a001","points":28,"reason":"完成公益实践任务","operator":"示例管理员","date":"2026-10-07","createdAt":"2026-10-07T18:31:00+08:00"},
+  {"id":"l003","childId":"c003","activityId":"a001","points":31,"reason":"完成公益实践任务","operator":"示例管理员","date":"2026-10-07","createdAt":"2026-10-07T18:32:00+08:00"},
+  {"id":"l004","childId":"c001","activityId":"a002","points":18,"reason":"亲子协作任务","operator":"示例管理员","date":"2026-09-20","createdAt":"2026-09-20T17:40:00+08:00"},
+  {"id":"l005","childId":"c004","activityId":"a002","points":26,"reason":"亲子协作任务","operator":"示例管理员","date":"2026-09-20","createdAt":"2026-09-20T17:42:00+08:00"},
+  {"id":"l006","childId":"c005","activityId":"a002","points":20,"reason":"亲子协作任务","operator":"示例管理员","date":"2026-09-20","createdAt":"2026-09-20T17:45:00+08:00"}
+]
