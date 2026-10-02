@@ -1,0 +1,30 @@
+.admin-body{background:linear-gradient(180deg,#EAF8FF,#FFF9ED 42%,#F4F8DE)}
+.admin-page{padding:36px 16px 70px}
+.admin-shell{width:min(1180px,100%);margin:0 auto}
+.admin-banner{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:30px;border-radius:28px;background:linear-gradient(135deg,#FFF8E5,#F1F9DA 52%,#E4F7FF);border:1px solid var(--line);box-shadow:var(--shadow);margin-bottom:22px}
+.admin-banner h1{font-size:36px;margin:10px 0 8px}
+.admin-banner p{max-width:760px;line-height:1.75;color:var(--muted)}
+.admin-mascot{width:130px}
+.admin-grid{display:grid;grid-template-columns:360px 1fr;gap:22px}
+.admin-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow)}
+.admin-card h2{margin:0 0 16px}
+.admin-card label{display:block;font-weight:700;margin:14px 0 7px}
+.admin-input{width:100%;margin-top:7px;min-height:44px;border:1px solid #EAD9B9;border-radius:13px;background:#FFFDF7;padding:0 12px;color:var(--ink);outline:none}
+.admin-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(246,190,56,.13)}
+.quick-points{display:flex;gap:8px;margin:8px 0}
+.quick-points button{border:1px solid #F0D79B;background:#FFF6DE;border-radius:999px;padding:7px 13px;color:#7A581F;font-weight:800}
+.quick-points button:hover{background:#FFE9A9}
+.admin-full{width:100%;margin-top:10px}
+.admin-card-wide{min-width:0}
+.admin-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.pending-list{display:flex;flex-direction:column;gap:9px;max-height:520px;overflow:auto;padding-right:3px}
+.pending-item{display:grid;grid-template-columns:1.1fr 1.4fr 90px 1.5fr auto;gap:10px;align-items:center;padding:12px;border:1px solid #EEE2C9;border-radius:14px;background:#FFFCF4}
+.pending-item .plus{font-weight:900;color:var(--green-dark)}
+.pending-item button{border:0;background:#FFE9E5;color:var(--red-dark);border-radius:10px;padding:7px 10px}
+.pending-empty{display:grid;place-items:center;min-height:220px;color:var(--muted);text-align:center}
+.pending-empty img{width:100px;margin-bottom:8px}
+.admin-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.admin-help{margin-top:22px}
+.admin-help ol{line-height:1.9;padding-left:22px}
+@media(max-width:860px){.admin-grid{grid-template-columns:1fr}.admin-banner{padding:22px}.admin-mascot{width:90px}.pending-item{grid-template-columns:1fr auto;grid-template-areas:"name score" "activity activity" "reason delete"}.pending-item .p-name{grid-area:name}.pending-item .p-activity{grid-area:activity}.pending-item .p-score{grid-area:score}.pending-item .p-reason{grid-area:reason}.pending-item button{grid-area:delete}}
+@media(max-width:520px){.admin-page{padding:20px 10px 50px}.admin-banner h1{font-size:28px}.admin-mascot{display:none}.admin-card{padding:16px}.admin-actions{display:grid}.admin-actions .btn{width:100%}}
