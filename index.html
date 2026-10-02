@@ -3,42 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#83B843">
-  <meta name="description" content="美德少年成长积分榜">
   <title>美德少年成长积分榜</title>
-  <link rel="stylesheet" href="./styles.css">
+  <meta name="theme-color" content="#88b83f">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="app-shell">
-    <header class="site-header">
-      <a class="brand" href="#/home" aria-label="返回首页">
-        <img src="./assets/mascot.svg" alt="" class="brand-mark">
-        <span>美德少年成长积分榜</span>
-      </a>
-      <button class="nav-toggle" id="nav-toggle" aria-label="打开菜单">☰</button>
-      <nav class="main-nav" id="main-nav">
-        <a href="#/home">首页</a>
-        <a href="#/total">总榜</a>
-        <a href="#/activity">活动榜</a>
-        <a href="#/profile">成长档案</a>
-        <a href="#/intro">活动介绍</a>
-        <a href="#/gallery">往期精彩</a>
-        <a href="./admin.html" class="admin-link">管理员入口</a>
-      </nav>
-    </header>
+  <header class="topbar">
+    <a class="brand" href="#/home">
+      <img src="assets/mascot.png" alt="芽芽">
+      <span>美德少年成长积分榜</span>
+    </a>
+    <button id="menuBtn" class="menu-btn">☰</button>
+    <nav id="nav" class="nav">
+      <a href="#/home">首页</a>
+      <a href="#/total">总榜</a>
+      <a href="#/activity">活动榜</a>
+      <a href="#/profile">成长档案</a>
+      <a href="#/intro">活动介绍</a>
+      <a href="#/gallery">往期精彩</a>
+      <a href="#/signup">报名入口</a>
+      <a href="admin.html">管理员</a>
+    </nav>
+  </header>
 
-    <main id="app" aria-live="polite">
-      <section class="loading-screen">
-        <img src="./assets/mascot.svg" alt="" class="loading-mascot">
-        <p>正在打开成长记录……</p>
-      </section>
-    </main>
+  <main id="app"></main>
 
-    <footer class="site-footer">
-      <div>美德少年成长积分榜 · 点滴积累，看见成长</div>
-      <div class="footer-note">第一版为 GitHub 静态版，积分由授权管理员维护。</div>
-    </footer>
-  </div>
-  <script src="./app.js" defer></script>
+  <footer class="site-footer">
+    <div>美德少年成长积分榜 · 点滴积累，看见成长</div>
+    <div class="foot-small">第一版静态展示站，积分与活动由管理员统一维护。</div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
 </body>
 </html>

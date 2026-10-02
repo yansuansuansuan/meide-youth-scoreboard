@@ -3,89 +3,41 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#83B843">
   <title>管理员工具｜美德少年成长积分榜</title>
-  <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./admin.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{background:linear-gradient(180deg,#eef8ff,#fff8ea 45%,#fffaf0)}
+    .admin-wrap{width:min(1180px,calc(100% - 28px));margin:28px auto 56px}
+    .admin-banner,.admin-card{background:#fff;border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow)}
+    .admin-banner{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px;margin-bottom:20px;background:linear-gradient(135deg,#fff8e5,#f4f9de 50%,#e5f7ff)}
+    .admin-banner img{width:120px;object-fit:contain}
+    .admin-grid{display:grid;grid-template-columns:360px 1fr;gap:20px}
+    .admin-card{padding:22px}.admin-card label{display:block;margin:12px 0 8px;font-weight:700}.admin-input{width:100%;min-height:44px;border:1px solid #ebd9b8;border-radius:13px;background:#fffdf7;padding:0 12px}
+    .quick{display:flex;gap:8px;margin-top:8px}.quick button{padding:7px 12px;border:1px solid #f0d79b;background:#fff6de;border-radius:999px;font-weight:800}
+    .pending{display:grid;gap:10px;max-height:520px;overflow:auto}.item{display:grid;grid-template-columns:1.1fr 1.2fr 80px 1.3fr auto;gap:10px;align-items:center;padding:12px;border-radius:14px;background:#fffbf2;border:1px solid #eee0c4}.item button{border:0;background:#ffe7e1;color:#c13628;padding:7px 10px;border-radius:10px}
+    .emptybox{text-align:center;color:var(--sub);padding:34px 16px}.emptybox img{width:110px;margin:0 auto 8px}
+    @media(max-width:860px){.admin-grid{grid-template-columns:1fr}.admin-banner img{display:none}.item{grid-template-columns:1fr auto;grid-template-areas:'a c' 'b b' 'd e'}.item .a{grid-area:a}.item .b{grid-area:b}.item .c{grid-area:c}.item .d{grid-area:d}.item button{grid-area:e}}
+  </style>
 </head>
-<body class="admin-body">
-  <header class="site-header">
-    <a class="brand" href="./index.html#/home">
-      <img src="./assets/mascot.svg" alt="" class="brand-mark">
-      <span>美德少年 · 管理工具</span>
-    </a>
-    <a class="btn btn-ghost" href="./index.html#/home">返回网站</a>
-  </header>
-
-  <main class="admin-page">
-    <div class="admin-shell">
-      <section class="admin-banner">
-        <div>
-          <span class="badge">GitHub-only V1</span>
-          <h1>积分流水管理</h1>
-          <p>这一版不会把管理员密码写在网页里。你在这里录入后导出 JSON，再覆盖 GitHub 中对应的数据文件；后续可在不改前台结构的情况下升级成真正在线后台。</p>
-        </div>
-        <img src="./assets/mascot.svg" alt="" class="admin-mascot">
-      </section>
-
-      <section class="admin-grid">
-        <aside class="admin-card">
-          <h2>1. 加一笔积分</h2>
-          <label>孩子
-            <select id="child-select" class="admin-input"></select>
-          </label>
-          <label>活动
-            <select id="activity-select-admin" class="admin-input"></select>
-          </label>
-          <label>积分
-            <div class="quick-points">
-              <button type="button" data-points="1">+1</button>
-              <button type="button" data-points="5">+5</button>
-              <button type="button" data-points="10">+10</button>
-            </div>
-            <input id="points-input" class="admin-input" type="number" value="5" step="1">
-          </label>
-          <label>加分原因
-            <input id="reason-input" class="admin-input" placeholder="例如：完成公益实践任务">
-          </label>
-          <label>操作人
-            <input id="operator-input" class="admin-input" placeholder="例如：周老师">
-          </label>
-          <label>日期
-            <input id="date-input" class="admin-input" type="date">
-          </label>
-          <button id="add-ledger" class="btn btn-primary admin-full">加入流水</button>
-        </aside>
-
-        <section class="admin-card admin-card-wide">
-          <div class="admin-card-head">
-            <div>
-              <h2>2. 本次待提交流水</h2>
-              <p class="muted small">这里的修改只存在当前浏览器里，刷新前请记得导出。</p>
-            </div>
-            <button id="clear-session" class="btn btn-ghost">清空本次</button>
-          </div>
-          <div id="pending-list" class="pending-list"></div>
-          <div class="admin-actions">
-            <button id="download-ledger" class="btn btn-green">下载 ledger.json</button>
-            <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/yansuansuansuan/meide-youth-scoreboard/blob/main/data/ledger.json">打开 GitHub 数据文件</a>
-          </div>
-        </section>
-      </section>
-
-      <section class="admin-card admin-help">
-        <h2>3. 怎么让网站更新？</h2>
-        <ol>
-          <li>在上面录入本次活动的积分，确认无误后点“下载 ledger.json”。</li>
-          <li>点击“打开 GitHub 数据文件”，在 GitHub 里选择编辑/上传替换。</li>
-          <li>把下载的新文件覆盖 <b>data/ledger.json</b>，提交保存。</li>
-          <li>GitHub Pages 更新后，总榜、活动榜、成长档案会自动重新计算。</li>
-        </ol>
-        <div class="notice-card"><b>为什么先这样？</b><p class="muted">纯 GitHub Pages 没有安全的服务器端登录。把 GitHub 写入令牌直接塞进网页会暴露，所以第一版宁愿多一步上传，也不把“管理员密码”做成假的安全机制。</p></div>
-      </section>
+<body>
+  <header class="topbar"><a class="brand" href="index.html#/home"><img src="assets/mascot.png" alt=""><span>美德少年 · 管理员工具</span></a><a class="btn btn-ghost" href="index.html#/home">返回网站</a></header>
+  <main class="admin-wrap">
+    <section class="admin-banner"><div><div class="kicker">GitHub 静态版</div><h1 style="margin:12px 0 8px">积分流水录入工具</h1><p class="meta">这一版仍然建议通过“下载 JSON → 覆盖 GitHub 数据文件”的方式维护，不把写入密钥暴露在网页里。</p></div><img src="assets/welcome_illus.png" alt=""></section>
+    <div class="admin-grid">
+      <section class="admin-card"><h2>加一笔积分</h2><label>孩子<select id="child" class="admin-input"></select></label><label>活动<select id="activity" class="admin-input"></select></label><label>积分<div class="quick"><button data-p="1">+1</button><button data-p="5">+5</button><button data-p="10">+10</button></div><input id="points" type="number" class="admin-input" value="5"></label><label>原因<input id="reason" class="admin-input" placeholder="例如：完成公益实践任务"></label><label>操作人<input id="operator" class="admin-input" placeholder="例如：周老师"></label><label>日期<input id="date" type="date" class="admin-input"></label><button id="add" class="btn btn-primary" style="width:100%;margin-top:12px">加入流水</button></section>
+      <section class="admin-card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap"><div><h2 style="margin:0 0 6px">待提交的本次流水</h2><div class="meta">刷新前请记得下载，当前只保存在本浏览器</div></div><button id="clear" class="btn btn-ghost">清空本次</button></div><div id="pending" class="pending" style="margin-top:16px"></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button id="download" class="btn btn-green">下载 ledger.json</button><a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/yansuansuansuan/meide-youth-scoreboard/blob/main/data/ledger.json">打开 GitHub 数据文件</a></div></section>
     </div>
   </main>
-  <div class="toast"></div>
-  <script src="./admin.js" defer></script>
+  <div id="toast" class="toast"></div>
+  <script>
+    let children=[],activities=[],base=[],pending=[]; const $=s=>document.querySelector(s); const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    function toast(msg){const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600)}
+    function uid(){return 'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+    function today(){return new Date().toISOString().slice(0,10)}
+    function load(){Promise.all(['children','activities','ledger'].map(f=>fetch('data/'+f+'.json?'+Date.now()).then(r=>r.json()))).then(([c,a,l])=>{children=c;activities=a;base=l; $('#child').innerHTML=c.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join(''); $('#activity').innerHTML=a.map(x=>`<option value="${x.id}">${esc(x.date+' '+x.title)}</option>`).join(''); $('#date').value=today(); pending=JSON.parse(sessionStorage.getItem('meide_pending')||'[]'); render();})}
+    function render(){const box=$('#pending'); if(!pending.length){box.innerHTML='<div class="emptybox"><img src="assets/no_photo.png" alt=""><div>本次还没有新增流水</div></div>'; return;} box.innerHTML=pending.map((e,i)=>`<div class="item"><b class="a">${esc((children.find(c=>c.id===e.childId)||{}).name||e.childId)}</b><span class="b meta">${esc((activities.find(a=>a.id===e.activityId)||{}).title||e.activityId)}</span><span class="c" style="font-weight:900;color:var(--green2)">+${e.points} 分</span><span class="d meta">${esc(e.reason)} · ${esc(e.operator)}</span><button data-del="${i}">删除</button></div>`).join(''); document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{pending.splice(+b.dataset.del,1);save()})}
+    function save(){sessionStorage.setItem('meide_pending',JSON.stringify(pending)); render();}
+    document.addEventListener('DOMContentLoaded',()=>{load(); document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>$('#points').value=b.dataset.p); $('#add').onclick=()=>{const points=Number($('#points').value||0), reason=$('#reason').value.trim(), operator=$('#operator').value.trim(); if(!points){toast('请输入积分');return} if(!reason){toast('请填写原因');return} if(!operator){toast('请填写操作人');return} pending.push({id:uid(), childId:$('#child').value, activityId:$('#activity').value, points, reason, operator, date:$('#date').value||today(), createdAt:new Date().toISOString()}); $('#reason').value=''; save(); toast('已加入本次流水')}; $('#clear').onclick=()=>{if(confirm('确定清空本次待提交流水吗？')){pending=[];save()}}; $('#download').onclick=()=>{const merged=base.concat(pending); const blob=new Blob([JSON.stringify(merged,null,2)+'\n'],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ledger.json'; a.click(); URL.revokeObjectURL(a.href); toast('ledger.json 已下载')}; });
+  </script>
 </body>
 </html>

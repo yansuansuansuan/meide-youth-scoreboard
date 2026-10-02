@@ -3,5 +3,5 @@
   "tagline":"每一次参与，都在记录成长",
   "registrationUrl":"",
   "photoLiveUrl":"",
-  "announcement":"当前展示的是演示数据，正式活动开始后由管理员更新。"
+  "announcement":"活动报名和喔图直播链接可由管理员在 data/settings.json 中随时更新。"
 }

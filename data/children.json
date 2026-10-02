@@ -1,7 +1,8 @@
 [
-  {"id":"c001","name":"林乐乐","avatar":"","joinedAt":"2026-09-01","active":true},
-  {"id":"c002","name":"陈星星","avatar":"","joinedAt":"2026-09-01","active":true},
-  {"id":"c003","name":"周可可","avatar":"","joinedAt":"2026-09-01","active":true},
-  {"id":"c004","name":"王小满","avatar":"","joinedAt":"2026-09-01","active":true},
-  {"id":"c005","name":"刘安安","avatar":"","joinedAt":"2026-09-01","active":true}
+  {"id":"c001","name":"林乐乐","avatar":"assets/avatar_girl1.png","active":true},
+  {"id":"c002","name":"陈星星","avatar":"assets/avatar_boy1.png","active":true},
+  {"id":"c003","name":"周可可","avatar":"assets/avatar_girl2.png","active":true},
+  {"id":"c004","name":"王小满","avatar":"assets/avatar_boy2.png","active":true},
+  {"id":"c005","name":"刘安安","avatar":"assets/avatar_girl1.png","active":true},
+  {"id":"c006","name":"赵一诺","avatar":"assets/avatar_boy1.png","active":true}
 ]
