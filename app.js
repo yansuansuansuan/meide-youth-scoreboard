@@ -82,7 +82,7 @@ function rankingPage(kind='total'){
       </div>
 
       <div class="ranking-footer">
-        <img class="footer-desktop" src="assets/footer_slogan.png" alt="成长寄语">
+        <img class="footer-desktop" src="assets/footer_slogan_fixed.webp" alt="成长寄语">
         <img class="footer-mobile" src="assets/mobile_tail.png" alt="成长寄语">
       </div>
     </div>
