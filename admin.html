@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#83B843">
+  <title>管理员工具｜美德少年成长积分榜</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./admin.css">
+</head>
+<body class="admin-body">
+  <header class="site-header">
+    <a class="brand" href="./index.html#/home">
+      <img src="./assets/mascot.svg" alt="" class="brand-mark">
+      <span>美德少年 · 管理工具</span>
+    </a>
+    <a class="btn btn-ghost" href="./index.html#/home">返回网站</a>
+  </header>
+
+  <main class="admin-page">
+    <div class="admin-shell">
+      <section class="admin-banner">
+        <div>
+          <span class="badge">GitHub-only V1</span>
+          <h1>积分流水管理</h1>
+          <p>这一版不会把管理员密码写在网页里。你在这里录入后导出 JSON，再覆盖 GitHub 中对应的数据文件；后续可在不改前台结构的情况下升级成真正在线后台。</p>
+        </div>
+        <img src="./assets/mascot.svg" alt="" class="admin-mascot">
+      </section>
+
+      <section class="admin-grid">
+        <aside class="admin-card">
+          <h2>1. 加一笔积分</h2>
+          <label>孩子
+            <select id="child-select" class="admin-input"></select>
+          </label>
+          <label>活动
+            <select id="activity-select-admin" class="admin-input"></select>
+          </label>
+          <label>积分
+            <div class="quick-points">
+              <button type="button" data-points="1">+1</button>
+              <button type="button" data-points="5">+5</button>
+              <button type="button" data-points="10">+10</button>
+            </div>
+            <input id="points-input" class="admin-input" type="number" value="5" step="1">
+          </label>
+          <label>加分原因
+            <input id="reason-input" class="admin-input" placeholder="例如：完成公益实践任务">
+          </label>
+          <label>操作人
+            <input id="operator-input" class="admin-input" placeholder="例如：周老师">
+          </label>
+          <label>日期
+            <input id="date-input" class="admin-input" type="date">
+          </label>
+          <button id="add-ledger" class="btn btn-primary admin-full">加入流水</button>
+        </aside>
+
+        <section class="admin-card admin-card-wide">
+          <div class="admin-card-head">
+            <div>
+              <h2>2. 本次待提交流水</h2>
+              <p class="muted small">这里的修改只存在当前浏览器里，刷新前请记得导出。</p>
+            </div>
+            <button id="clear-session" class="btn btn-ghost">清空本次</button>
+          </div>
+          <div id="pending-list" class="pending-list"></div>
+          <div class="admin-actions">
+            <button id="download-ledger" class="btn btn-green">下载 ledger.json</button>
+            <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/yansuansuansuan/meide-youth-scoreboard/blob/main/data/ledger.json">打开 GitHub 数据文件</a>
+          </div>
+        </section>
+      </section>
+
+      <section class="admin-card admin-help">
+        <h2>3. 怎么让网站更新？</h2>
+        <ol>
+          <li>在上面录入本次活动的积分，确认无误后点“下载 ledger.json”。</li>
+          <li>点击“打开 GitHub 数据文件”，在 GitHub 里选择编辑/上传替换。</li>
+          <li>把下载的新文件覆盖 <b>data/ledger.json</b>，提交保存。</li>
+          <li>GitHub Pages 更新后，总榜、活动榜、成长档案会自动重新计算。</li>
+        </ol>
+        <div class="notice-card"><b>为什么先这样？</b><p class="muted">纯 GitHub Pages 没有安全的服务器端登录。把 GitHub 写入令牌直接塞进网页会暴露，所以第一版宁愿多一步上传，也不把“管理员密码”做成假的安全机制。</p></div>
+      </section>
+    </div>
+  </main>
+  <div class="toast"></div>
+  <script src="./admin.js" defer></script>
+</body>
+</html>
