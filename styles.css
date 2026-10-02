@@ -731,3 +731,32 @@ img{display:block;max-width:100%}
     filter:drop-shadow(0 14px 24px rgba(126,43,18,.24));
   }
 }
+
+
+/* ===== Owner-requested cleanup and guaranteed activity title ===== */
+.brand{white-space:nowrap;flex:0 0 auto}
+.activity-title-force{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-43%)!important;
+  z-index:50!important;
+  width:min(720px,52vw)!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  pointer-events:none!important;
+}
+.activity-title-force img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:330px!important;
+  object-fit:contain!important;
+  opacity:1!important;
+  visibility:visible!important;
+  filter:drop-shadow(0 14px 24px rgba(126,43,18,.22));
+}
+@media(max-width:820px){
+  .activity-title-force{display:none!important}
+}
