@@ -100,7 +100,7 @@ function profilePage(){const child=byId(state.children,state.selectedChild)||sta
     <aside class="aside-box"><strong>选择孩子</strong><div class="child-list">${state.children.map(c=>`<button class="child-btn ${c.id===child.id?'active':''}" data-child="${c.id}">${esc(c.name)}</button>`).join('')}</div></aside>
     <section class="main-box"><div class="profile-head"><img class="avatar" src="${avatarOf(child)}" alt=""><div><h2 style="margin:0 0 6px">${esc(child.name)}</h2><div class="meta">个人成长记录</div></div></div>
       <div class="stat-grid"><div class="stat">累计积分<b>${total}</b></div><div class="stat">参与活动<b>${acts}</b></div><div class="stat">积分记录<b>${entries.length}</b></div></div>
-      <h3>积分流水</h3><div class="timeline">${entries.length?entries.map(e=>{const a=byId(state.activities,e.activityId); return `<div class="event"><strong>${e.points>=0?'+':''}${e.points} 分 · ${esc(e.reason)}</strong><div>${esc(a?.title||'未命名活动')}</div><div class="meta">${fmtDate(e.date)} · 录入：${esc(e.operator||'管理员')}</div></div>`}).join(''):`<div class="empty"><img src="assets/loading_photo.png" alt=""><div>还没有成长记录</div></div>`}</div>
+      <h3>积分流水</h3><div class="timeline">${entries.length?entries.map(e=>{const a=byId(state.activities,e.activityId); return `<div class="event"><strong>${e.points>=0?'+':''}${e.points} 分${e.reason?' · '+esc(e.reason):''}</strong><div>${esc(a?.title||'未命名活动')}</div><div class="meta">${fmtDate(e.date)} · 录入：${esc(e.operator||'管理员')}</div></div>`}).join(''):`<div class="empty"><img src="assets/loading_photo.png" alt=""><div>还没有成长记录</div></div>`}</div>
     </section>
   </div></div>
 </section>`}
