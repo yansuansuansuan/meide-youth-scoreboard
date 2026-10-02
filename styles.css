@@ -229,3 +229,54 @@ img{display:block;max-width:100%}
   .ranking-context{align-items:flex-start}
   .ranking-context-title{font-size:16px}
 }
+
+
+/* Ranking card layout refinement */
+.ranking-head,
+.ranking-context,
+.rank-mode-pill,
+.ranking-context-title{
+  display:none!important;
+}
+.activity-filter-row{
+  display:flex;
+  justify-content:flex-start;
+  margin:0 0 18px;
+}
+.activity-select{
+  width:min(560px,100%);
+}
+.ranking-search-row{
+  margin:6px 0 18px;
+}
+.ranking-search{
+  display:block;
+  width:100%;
+  min-width:0;
+  height:54px;
+  padding:0 20px;
+  border-radius:18px;
+  font-size:17px;
+  background:#fffefb;
+  border:1.5px solid #ead39b;
+  box-shadow:0 5px 16px rgba(105,77,36,.05) inset;
+}
+.ranking-search:focus{
+  outline:none;
+  border-color:#f3bf41;
+  box-shadow:0 0 0 4px rgba(243,191,65,.12);
+}
+.ranking-card .podium{
+  margin-top:6px;
+  margin-bottom:20px;
+}
+
+@media(max-width:820px){
+  .activity-filter-row{margin-bottom:14px}
+  .activity-select{width:100%}
+  .ranking-search{
+    height:50px;
+    border-radius:16px;
+    font-size:16px;
+  }
+}
