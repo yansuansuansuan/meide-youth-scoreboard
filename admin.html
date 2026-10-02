@@ -3,41 +3,205 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>管理员工具｜美德少年成长积分榜</title>
+  <meta name="theme-color" content="#83B843">
+  <title>积分管理｜美德少年成长积分榜</title>
   <link rel="stylesheet" href="styles.css">
   <style>
     body{background:linear-gradient(180deg,#eef8ff,#fff8ea 45%,#fffaf0)}
     .admin-wrap{width:min(1180px,calc(100% - 28px));margin:28px auto 56px}
-    .admin-banner,.admin-card{background:#fff;border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow)}
-    .admin-banner{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px;margin-bottom:20px;background:linear-gradient(135deg,#fff8e5,#f4f9de 50%,#e5f7ff)}
-    .admin-banner img{width:120px;object-fit:contain}
-    .admin-grid{display:grid;grid-template-columns:360px 1fr;gap:20px}
-    .admin-card{padding:22px}.admin-card label{display:block;margin:12px 0 8px;font-weight:700}.admin-input{width:100%;min-height:44px;border:1px solid #ebd9b8;border-radius:13px;background:#fffdf7;padding:0 12px}
-    .quick{display:flex;gap:8px;margin-top:8px}.quick button{padding:7px 12px;border:1px solid #f0d79b;background:#fff6de;border-radius:999px;font-weight:800}
-    .pending{display:grid;gap:10px;max-height:520px;overflow:auto}.item{display:grid;grid-template-columns:1.1fr 1.2fr 80px 1.3fr auto;gap:10px;align-items:center;padding:12px;border-radius:14px;background:#fffbf2;border:1px solid #eee0c4}.item button{border:0;background:#ffe7e1;color:#c13628;padding:7px 10px;border-radius:10px}
-    .emptybox{text-align:center;color:var(--sub);padding:34px 16px}.emptybox img{width:110px;margin:0 auto 8px}
-    @media(max-width:860px){.admin-grid{grid-template-columns:1fr}.admin-banner img{display:none}.item{grid-template-columns:1fr auto;grid-template-areas:'a c' 'b b' 'd e'}.item .a{grid-area:a}.item .b{grid-area:b}.item .c{grid-area:c}.item .d{grid-area:d}.item button{grid-area:e}}
+    .admin-title{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:18px}
+    .admin-title h1{margin:0;font-size:32px}
+    .admin-grid{display:grid;grid-template-columns:380px 1fr;gap:20px}
+    .admin-card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:var(--shadow)}
+    .admin-card h2{margin:0 0 14px}
+    .admin-card label{display:block;margin:13px 0 7px;font-weight:700}
+    .admin-input{width:100%;min-height:46px;border:1px solid #ead8b5;border-radius:13px;background:#fffdf7;padding:0 13px;color:var(--text);outline:none}
+    .admin-input:focus{border-color:#f0bd43;box-shadow:0 0 0 3px rgba(240,189,67,.14)}
+    .quick{display:flex;gap:8px;margin:8px 0}
+    .quick button{border:1px solid #efd696;background:#fff5dc;border-radius:999px;padding:7px 13px;font-weight:800;cursor:pointer}
+    .pending{display:grid;gap:9px;max-height:540px;overflow:auto;margin-top:14px}
+    .item{display:grid;grid-template-columns:1fr 1.25fr 82px 1.35fr auto;gap:10px;align-items:center;padding:12px;border:1px solid #eee0c4;border-radius:14px;background:#fffcf5}
+    .item button{border:0;background:#ffe7e2;color:#c63a2c;border-radius:9px;padding:7px 10px;cursor:pointer}
+    .emptybox{text-align:center;color:var(--sub);padding:36px 16px}
+    .emptybox img{width:100px;margin:0 auto 8px}
+    .admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .child-search{position:relative}
+    .child-dropdown{display:none;position:absolute;z-index:80;left:0;right:0;top:calc(100% + 6px);max-height:230px;overflow:auto;background:#fff;border:1px solid #ead8b5;border-radius:13px;box-shadow:0 14px 34px rgba(87,63,35,.14);padding:6px}
+    .child-dropdown.open{display:block}
+    .child-option{width:100%;display:flex;align-items:center;gap:10px;border:0;background:#fff;padding:9px 10px;border-radius:10px;text-align:left;cursor:pointer;color:var(--text)}
+    .child-option:hover,.child-option.active{background:#eef8dd}
+    .child-option img{width:34px;height:34px;border-radius:50%;object-fit:cover}
+    .no-match{padding:12px;color:var(--sub);font-size:14px}
+    @media(max-width:860px){
+      .admin-grid{grid-template-columns:1fr}
+      .item{grid-template-columns:1fr auto;grid-template-areas:"a c" "b b" "d e"}
+      .item .a{grid-area:a}.item .b{grid-area:b}.item .c{grid-area:c}.item .d{grid-area:d}.item button{grid-area:e}
+    }
   </style>
 </head>
 <body>
-  <header class="topbar"><a class="brand" href="index.html#/home"><img src="assets/mascot.png" alt=""><span>美德少年 · 管理员工具</span></a><a class="btn btn-ghost" href="index.html#/home">返回网站</a></header>
+  <header class="topbar">
+    <a class="brand" href="index.html#/home"><img src="assets/mascot.png" alt=""><span>美德少年成长积分榜</span></a>
+    <a class="btn btn-ghost" href="index.html#/home">返回网站</a>
+  </header>
+
   <main class="admin-wrap">
-    <section class="admin-banner"><div><div class="kicker">GitHub 静态版</div><h1 style="margin:12px 0 8px">积分流水录入工具</h1><p class="meta">这一版仍然建议通过“下载 JSON → 覆盖 GitHub 数据文件”的方式维护，不把写入密钥暴露在网页里。</p></div><img src="assets/welcome_illus.png" alt=""></section>
+    <div class="admin-title"><h1>积分管理</h1></div>
+
     <div class="admin-grid">
-      <section class="admin-card"><h2>加一笔积分</h2><label>孩子<select id="child" class="admin-input"></select></label><label>活动<select id="activity" class="admin-input"></select></label><label>积分<div class="quick"><button data-p="1">+1</button><button data-p="5">+5</button><button data-p="10">+10</button></div><input id="points" type="number" class="admin-input" value="5"></label><label>原因<input id="reason" class="admin-input" placeholder="例如：完成公益实践任务"></label><label>操作人<input id="operator" class="admin-input" placeholder="例如：周老师"></label><label>日期<input id="date" type="date" class="admin-input"></label><button id="add" class="btn btn-primary" style="width:100%;margin-top:12px">加入流水</button></section>
-      <section class="admin-card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap"><div><h2 style="margin:0 0 6px">待提交的本次流水</h2><div class="meta">刷新前请记得下载，当前只保存在本浏览器</div></div><button id="clear" class="btn btn-ghost">清空本次</button></div><div id="pending" class="pending" style="margin-top:16px"></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button id="download" class="btn btn-green">下载 ledger.json</button><a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/yansuansuansuan/meide-youth-scoreboard/blob/main/data/ledger.json">打开 GitHub 数据文件</a></div></section>
+      <section class="admin-card">
+        <h2>加一笔积分</h2>
+
+        <label for="childInput">孩子</label>
+        <div class="child-search">
+          <input id="childInput" class="admin-input" type="text" autocomplete="off" placeholder="输入姓名搜索，例如：乐">
+          <input id="childId" type="hidden">
+          <div id="childDropdown" class="child-dropdown"></div>
+        </div>
+
+        <label for="activity">活动</label>
+        <select id="activity" class="admin-input"></select>
+
+        <label for="points">积分</label>
+        <div class="quick"><button type="button" data-p="1">+1</button><button type="button" data-p="5">+5</button><button type="button" data-p="10">+10</button></div>
+        <input id="points" type="number" class="admin-input" value="5">
+
+        <label for="reason">原因</label>
+        <input id="reason" class="admin-input" placeholder="例如：完成公益实践任务">
+
+        <label for="operator">操作人</label>
+        <input id="operator" class="admin-input" placeholder="例如：周老师">
+
+        <label for="date">日期</label>
+        <input id="date" type="date" class="admin-input">
+
+        <button id="add" class="btn btn-primary" style="width:100%;margin-top:14px">加入流水</button>
+      </section>
+
+      <section class="admin-card">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+          <h2 style="margin:0">待提交积分</h2>
+          <button id="clear" class="btn btn-ghost">清空</button>
+        </div>
+        <div id="pending" class="pending"></div>
+        <div class="admin-actions">
+          <button id="download" class="btn btn-green">下载更新文件</button>
+          <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/yansuansuansuan/meide-youth-scoreboard/blob/main/data/ledger.json">打开积分数据</a>
+        </div>
+      </section>
     </div>
   </main>
+
   <div id="toast" class="toast"></div>
   <script>
-    let children=[],activities=[],base=[],pending=[]; const $=s=>document.querySelector(s); const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-    function toast(msg){const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600)}
+    let children=[],activities=[],base=[],pending=[];
+    const $=s=>document.querySelector(s);
+    const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
     function uid(){return 'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
     function today(){return new Date().toISOString().slice(0,10)}
-    function load(){Promise.all(['children','activities','ledger'].map(f=>fetch('data/'+f+'.json?'+Date.now()).then(r=>r.json()))).then(([c,a,l])=>{children=c;activities=a;base=l; $('#child').innerHTML=c.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join(''); $('#activity').innerHTML=a.map(x=>`<option value="${x.id}">${esc(x.date+' '+x.title)}</option>`).join(''); $('#date').value=today(); pending=JSON.parse(sessionStorage.getItem('meide_pending')||'[]'); render();})}
-    function render(){const box=$('#pending'); if(!pending.length){box.innerHTML='<div class="emptybox"><img src="assets/no_photo.png" alt=""><div>本次还没有新增流水</div></div>'; return;} box.innerHTML=pending.map((e,i)=>`<div class="item"><b class="a">${esc((children.find(c=>c.id===e.childId)||{}).name||e.childId)}</b><span class="b meta">${esc((activities.find(a=>a.id===e.activityId)||{}).title||e.activityId)}</span><span class="c" style="font-weight:900;color:var(--green2)">+${e.points} 分</span><span class="d meta">${esc(e.reason)} · ${esc(e.operator)}</span><button data-del="${i}">删除</button></div>`).join(''); document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{pending.splice(+b.dataset.del,1);save()})}
-    function save(){sessionStorage.setItem('meide_pending',JSON.stringify(pending)); render();}
-    document.addEventListener('DOMContentLoaded',()=>{load(); document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>$('#points').value=b.dataset.p); $('#add').onclick=()=>{const points=Number($('#points').value||0), reason=$('#reason').value.trim(), operator=$('#operator').value.trim(); if(!points){toast('请输入积分');return} if(!reason){toast('请填写原因');return} if(!operator){toast('请填写操作人');return} pending.push({id:uid(), childId:$('#child').value, activityId:$('#activity').value, points, reason, operator, date:$('#date').value||today(), createdAt:new Date().toISOString()}); $('#reason').value=''; save(); toast('已加入本次流水')}; $('#clear').onclick=()=>{if(confirm('确定清空本次待提交流水吗？')){pending=[];save()}}; $('#download').onclick=()=>{const merged=base.concat(pending); const blob=new Blob([JSON.stringify(merged,null,2)+'\n'],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ledger.json'; a.click(); URL.revokeObjectURL(a.href); toast('ledger.json 已下载')}; });
+    function childById(id){return children.find(c=>c.id===id)}
+    function activityById(id){return activities.find(a=>a.id===id)}
+    function save(){sessionStorage.setItem('meide_pending',JSON.stringify(pending));renderPending()}
+
+    function selectChild(child){
+      $('#childInput').value=child.name;
+      $('#childId').value=child.id;
+      $('#childDropdown').classList.remove('open');
+    }
+
+    function renderChildMatches(query=''){
+      const q=query.trim();
+      const matches=children.filter(c=>c.active!==false && (!q || c.name.includes(q)));
+      const box=$('#childDropdown');
+      if(!matches.length){
+        box.innerHTML='<div class="no-match">没有找到匹配的小朋友</div>';
+      }else{
+        box.innerHTML=matches.map(c=>`<button type="button" class="child-option" data-child-id="${esc(c.id)}"><img src="${esc(c.avatar||'assets/default-avatar.svg')}" alt=""><span>${esc(c.name)}</span></button>`).join('');
+        box.querySelectorAll('[data-child-id]').forEach(btn=>{
+          btn.onclick=()=>selectChild(childById(btn.dataset.childId));
+        });
+      }
+      box.classList.add('open');
+    }
+
+    function renderPending(){
+      const box=$('#pending');
+      if(!pending.length){
+        box.innerHTML='<div class="emptybox"><img src="assets/no_photo.png" alt=""><div>暂无待提交积分</div></div>';
+        return;
+      }
+      box.innerHTML=pending.map((e,i)=>`<div class="item"><b class="a">${esc(childById(e.childId)?.name||e.childId)}</b><span class="b meta">${esc(activityById(e.activityId)?.title||e.activityId)}</span><span class="c" style="font-weight:900;color:var(--green2)">${e.points>=0?'+':''}${e.points} 分</span><span class="d meta">${esc(e.reason)} · ${esc(e.operator)}</span><button data-del="${i}">删除</button></div>`).join('');
+      box.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{pending.splice(Number(b.dataset.del),1);save()});
+    }
+
+    async function load(){
+      const [c,a,l]=await Promise.all(['children','activities','ledger'].map(f=>fetch('data/'+f+'.json?'+Date.now()).then(r=>r.json())));
+      children=c;activities=a;base=l;
+      $('#activity').innerHTML=activities.map(x=>`<option value="${esc(x.id)}">${esc(x.date+' '+x.title)}</option>`).join('');
+      $('#date').value=today();
+      pending=JSON.parse(sessionStorage.getItem('meide_pending')||'[]');
+      renderPending();
+    }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      load().catch(()=>toast('数据加载失败'));
+
+      const childInput=$('#childInput');
+      childInput.addEventListener('focus',()=>renderChildMatches(childInput.value));
+      childInput.addEventListener('input',()=>{
+        $('#childId').value='';
+        renderChildMatches(childInput.value);
+      });
+      document.addEventListener('click',e=>{
+        if(!e.target.closest('.child-search')) $('#childDropdown').classList.remove('open');
+      });
+
+      document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>$('#points').value=b.dataset.p);
+
+      $('#add').onclick=()=>{
+        const typed=childInput.value.trim();
+        let child=childById($('#childId').value);
+        if(!child && typed) child=children.find(c=>c.name===typed);
+        if(!child){toast('请从名单中选择小朋友');renderChildMatches(typed);return}
+
+        const points=Number($('#points').value||0);
+        const reason=$('#reason').value.trim();
+        const operator=$('#operator').value.trim();
+        if(!points){toast('请输入积分');return}
+        if(!reason){toast('请填写原因');return}
+        if(!operator){toast('请填写操作人');return}
+
+        pending.push({
+          id:uid(),
+          childId:child.id,
+          activityId:$('#activity').value,
+          points,
+          reason,
+          operator,
+          date:$('#date').value||today(),
+          createdAt:new Date().toISOString()
+        });
+        $('#reason').value='';
+        save();
+        toast('已加入积分流水');
+      };
+
+      $('#clear').onclick=()=>{if(confirm('确定清空待提交积分吗？')){pending=[];save()}};
+
+      $('#download').onclick=()=>{
+        const merged=base.concat(pending);
+        const blob=new Blob([JSON.stringify(merged,null,2)+'\n'],{type:'application/json;charset=utf-8'});
+        const a=document.createElement('a');
+        a.href=URL.createObjectURL(blob);
+        a.download='ledger.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(a.href);
+        toast('更新文件已下载');
+      };
+    });
   </script>
 </body>
 </html>
