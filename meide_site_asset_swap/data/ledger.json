@@ -1,0 +1,13 @@
+[
+  {"id":"l001","childId":"c001","activityId":"a001","points":35,"reason":"完成公益实践任务","operator":"周老师","date":"2026-10-07"},
+  {"id":"l002","childId":"c002","activityId":"a001","points":28,"reason":"完成公益实践任务","operator":"周老师","date":"2026-10-07"},
+  {"id":"l003","childId":"c003","activityId":"a001","points":31,"reason":"完成公益实践任务","operator":"周老师","date":"2026-10-07"},
+  {"id":"l004","childId":"c004","activityId":"a001","points":24,"reason":"完成公益实践任务","operator":"周老师","date":"2026-10-07"},
+  {"id":"l005","childId":"c005","activityId":"a001","points":20,"reason":"完成公益实践任务","operator":"周老师","date":"2026-10-07"},
+  {"id":"l006","childId":"c006","activityId":"a001","points":18,"reason":"完成公益实践任务","operator":"周老师","date":"2026-10-07"},
+  {"id":"l007","childId":"c001","activityId":"a002","points":18,"reason":"积极参与义卖","operator":"管理员","date":"2026-10-01"},
+  {"id":"l008","childId":"c004","activityId":"a002","points":26,"reason":"亲子协作任务","operator":"管理员","date":"2026-10-01"},
+  {"id":"l009","childId":"c005","activityId":"a002","points":22,"reason":"完成互动挑战","operator":"管理员","date":"2026-10-01"},
+  {"id":"l010","childId":"c003","activityId":"a003","points":15,"reason":"课堂表现积极","operator":"管理员","date":"2026-09-20"},
+  {"id":"l011","childId":"c002","activityId":"a003","points":19,"reason":"团队合作良好","operator":"管理员","date":"2026-09-20"}
+]
