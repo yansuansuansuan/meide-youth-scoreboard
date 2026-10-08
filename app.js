@@ -27,15 +27,13 @@ function homePage(){return `
     <img class="banner-mobile" src="assets/home_head.jpg" alt="美德少年成长计划">
   </div>
   <div class="home-inner">
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="#/total">查看总榜</a>
-      <a class="btn btn-secondary" href="#/activity">查看活动榜</a>
-      <a class="btn btn-green" href="#/signup">报名入口</a>
-    </div>
-    <div class="feature-grid">
-      <a class="feature-card" href="#/intro"><img src="assets/intro_icon.png" alt=""><h3>系列活动介绍</h3><p>了解项目定位、成长机制与活动价值。</p></a>
-      <a class="feature-card" href="#/gallery"><img src="assets/gallery_icon.png" alt=""><h3>往期精彩</h3><p>查看活动后整理上传的照片与成长瞬间。</p></a>
-      <a class="feature-card" href="#/profile"><img src="assets/profile_icon.png" alt=""><h3>成长档案</h3><p>积分流水、参与活动、个人成长记录一目了然。</p></a>
+    <div class="home-cards">
+      <a class="home-card" href="#/total"><img src="assets/card_total.jpg" alt="查看总榜"></a>
+      <a class="home-card" href="#/activity"><img src="assets/card_activity.jpg" alt="查看活动榜"></a>
+      <a class="home-card" href="#/signup"><img src="assets/card_signup.jpg" alt="报名入口"></a>
+      <a class="home-card" href="#/intro"><img src="assets/card_intro.jpg" alt="系列活动介绍"></a>
+      <a class="home-card" href="#/gallery"><img src="assets/card_gallery.jpg" alt="往期精彩"></a>
+      <a class="home-card" href="#/profile"><img src="assets/card_profile.jpg" alt="成长档案"></a>
     </div>
   </div>
 </section>`}
