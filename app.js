@@ -2,7 +2,8 @@ const state={children:[],activities:[],ledger:[],gallery:[],settings:{},selected
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const fmtDate=v=>{if(!v) return ''; const d=new Date(v+'T00:00:00'); return isNaN(d)?v:`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`};
-const avatarOf=c=>c.avatar||['assets/avatar_boy1.png','assets/avatar_boy2.png','assets/avatar_girl1.png','assets/avatar_girl2.png'][Math.abs(hashCode(c.id||c.name))%4];
+const AVATARS=Array.from({length:20},(_,i)=>`assets/avatar_${String(i+1).padStart(2,'0')}.jpg`);
+const avatarOf=c=>c.avatar||AVATARS[Math.abs(hashCode(c.id||c.name))%AVATARS.length];
 const hashCode=s=>[...String(s)].reduce((a,c)=>((a<<5)-a)+c.charCodeAt(0)|0,0);
 const byId=(arr,id)=>arr.find(x=>x.id===id);
 function toast(msg){const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600)}

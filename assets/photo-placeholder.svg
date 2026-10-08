@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450">
-<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#EAF8FF"/><stop offset=".5" stop-color="#FFF6D9"/><stop offset="1" stop-color="#EAF6D5"/></linearGradient></defs>
-<rect width="600" height="450" rx="38" fill="url(#bg)"/>
-<rect x="116" y="84" width="368" height="280" rx="28" fill="#FFFDF8" stroke="#EFD9AF" stroke-width="8"/>
-<circle cx="385" cy="157" r="38" fill="#FFD86D"/>
-<path d="M157 319l92-99 65 67 48-47 82 79H157z" fill="#9FD16A"/>
-<path d="M194 319l72-76 48 49 42-40 69 67z" fill="#78B8D3" opacity=".75"/>
-<text x="300" y="405" text-anchor="middle" font-size="26" fill="#887565" font-family="sans-serif">暂无图片</text>
-</svg>
