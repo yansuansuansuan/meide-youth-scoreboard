@@ -77,7 +77,10 @@ function podiumHtml(rows){const order=[1,0,2],cls=['second','first','third']; re
 function tableHtml(rows){ if(!rows.length) return `<div class="empty"><img src="assets/no_photo.png" alt=""><div>暂时还没有积分记录</div></div>`; return `<table class="rank-table"><thead><tr><th>排名</th><th>姓名</th><th>参与活动</th><th>积分</th></tr></thead><tbody>${rows.map((r,i)=>`<tr data-name="${esc(r.child.name)}"><td><span class="rank-num">${String(i+1).padStart(2,'0')}</span></td><td>${esc(r.child.name)}</td><td>参加 ${r.activities} 场</td><td class="score">${r.points} 分</td></tr>`).join('')}</tbody></table>`}
 function profilePage(){const child=byId(state.children,state.selectedChild)||state.children[0]; if(!child)return ''; const entries=state.ledger.filter(x=>x.childId===child.id).sort((a,b)=>String(b.date).localeCompare(String(a.date))); const total=entries.reduce((s,e)=>s+(+e.points||0),0); const acts=new Set(entries.map(x=>x.activityId)).size; return `
 <section>
-  <div class="section-hero"><div class="container"><h1>成长档案</h1><p>记录每个孩子在系列活动中的参与与成长。</p></div></div>
+  <div class="banner-wrap ranking-hero profile-hero">
+    <img class="banner-desktop" src="assets/profile_head.jpg" alt="成长档案头图">
+    <img class="banner-mobile" src="assets/profile_head.jpg" alt="成长档案头图">
+  </div>
   <div class="content-pad"><div class="container profile-layout">
     <aside class="aside-box"><strong>选择孩子</strong><div class="child-list">${state.children.map(c=>`<button class="child-btn ${c.id===child.id?'active':''}" data-child="${c.id}">${esc(c.name)}</button>`).join('')}</div></aside>
     <section class="main-box"><div class="profile-head"><img class="avatar" src="${avatarOf(child)}" alt=""><div><h2 style="margin:0 0 6px">${esc(child.name)}</h2><div class="meta">个人成长记录</div></div></div>
