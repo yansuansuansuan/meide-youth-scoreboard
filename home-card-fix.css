@@ -1,0 +1,17 @@
+/* 首页六个功能入口：让可点击卡片尺寸与横幅图片本体一致，裁掉生成图上下的白边 */
+.home-card{
+  position:relative;
+  aspect-ratio:2 / 1;
+  overflow:hidden;
+  background:transparent;
+}
+
+.home-card img{
+  position:absolute;
+  left:0;
+  top:50%;
+  width:100%;
+  height:auto;
+  max-width:none;
+  transform:translateY(-50%);
+}
