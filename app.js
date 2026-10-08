@@ -22,11 +22,11 @@ function totals(activityId=null){
 }
 function homePage(){return `
 <section class="home-hero">
+  <div class="banner-wrap ranking-hero home-banner">
+    <img class="banner-desktop" src="assets/home_head.jpg" alt="美德少年成长计划">
+    <img class="banner-mobile" src="assets/home_head.jpg" alt="美德少年成长计划">
+  </div>
   <div class="home-inner">
-    <img src="assets/mascot.png" class="hero-mascot" alt="芽芽">
-    <div class="kicker">🌱 美德少年成长计划</div>
-    <h1 class="home-title">${esc(state.settings.projectTitle||'美德少年成长积分榜')}</h1>
-    <p class="home-sub">${esc(state.settings.tagline||'每一次参与，都在记录成长')}</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="#/total">查看总榜</a>
       <a class="btn btn-secondary" href="#/activity">查看活动榜</a>
