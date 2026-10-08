@@ -44,19 +44,13 @@ function rankingPage(kind='total'){
   const activityId=isActivity?state.selectedActivity:null;
   const rows=totals(activityId);
   const act=byId(state.activities,activityId);
-  const headBg=isActivity?'assets/activity_pc_head.png':'assets/total_pc_head.png';
-  const titleImg=isActivity?'assets/activity_title_badge.png':'assets/total_title.png';
-  const subImg='assets/total_subtitle.png';
+  const headBg=isActivity?'assets/activity_head.jpg':'assets/total_head.jpg';
   const activityLabel=act?`${fmtDate(act.date)} · ${act.title}`:'请选择活动';
   return `
   <section class="page-shell ${isActivity?'activity-page':'total-page'}">
     <div class="banner-wrap ranking-hero ${isActivity?'activity-hero':'total-hero'}">
       <img class="banner-desktop" src="${headBg}" alt="${isActivity?'活动榜':'总榜'}头图">
       <img class="banner-mobile" src="${headBg}" alt="${isActivity?'活动榜':'总榜'}头图">
-      <div class="hero-overlay ${isActivity?'activity':''}">
-        <img class="hero-title-image ${isActivity?'activity':''}" src="${titleImg}" alt="${isActivity?'活动榜':'总榜'}标题">
-        ${!isActivity?`<img class="hero-sub-image" src="${subImg}" alt="点滴积累 看见成长">`:''}
-      </div>
     </div>
     <div class="ranking-bg">
       <div class="ranking-card">
