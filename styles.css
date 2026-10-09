@@ -91,8 +91,10 @@ img{display:block;max-width:100%}
 .intro-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:20px}.point-list{display:grid;gap:12px}.point{padding:16px;border-radius:18px;background:#f6fae9;border:1px solid #d9e9c2}
 .gallery-page{min-height:calc(100vh - 72px);background:#fde059}
 .signup-page{min-height:calc(100vh - 72px);background:#79c0f9}
-.activity-bgpage{min-height:calc(100vh - 72px);background:url('assets/activity_bg.jpg') repeat-y top center/100% auto}
+.activity-bgpage{position:relative;isolation:isolate}
+.activity-bgpage::before{content:"";position:absolute;left:0;right:0;top:0;bottom:0;background:url('assets/activity_bg.jpg') repeat-y top center/100% auto;opacity:.7;z-index:-1;pointer-events:none}
 .activity-bgpage .ranking-bg{background:none}
+.activity-bgpage .page-shell{padding-bottom:0}
 .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.photo-card{overflow:hidden;border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 24px rgba(94,70,40,.08)}
 .photo-thumb{aspect-ratio:4/3;background:linear-gradient(135deg,#ecf9ff,#fff3d5 52%,#eff8d9);display:grid;place-items:center}.photo-thumb img{width:100%;height:100%;object-fit:cover}
 .photo-body{padding:15px}.photo-body h3{margin:0 0 6px}.photo-body p{margin:0;color:var(--sub);font-size:14px}
