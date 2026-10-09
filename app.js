@@ -1,6 +1,6 @@
 const state={children:[],activities:[],ledger:[],gallery:[],settings:{},selectedActivity:null,selectedChild:null};
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const fmtDate=v=>{if(!v) return ''; const d=new Date(v+'T00:00:00'); return isNaN(d)?v:`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`};
 const AVATARS=Array.from({length:20},(_,i)=>`assets/avatar_${String(i+1).padStart(2,'0')}.jpg`);
 const avatarOf=c=>c.avatar||AVATARS[Math.abs(hashCode(c.id||c.name))%AVATARS.length];
