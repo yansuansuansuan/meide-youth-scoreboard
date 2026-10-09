@@ -28,9 +28,7 @@
   box-shadow:0 12px 26px rgba(93,109,68,.14);
 }
 
-/* 六张图都使用同一显示尺寸。
-   查看总榜本来就是这个效果，因此它视觉上保持不变；
-   其余五张只修正“缩得太小”的问题，不再额外放大或缩放。 */
+/* 六张图保持统一尺寸与居中显示 */
 .home-card img{
   position:static;
   display:block;
@@ -42,7 +40,13 @@
   object-fit:cover;
   object-position:center center;
   transform:none;
+  transform-origin:center center;
   border-radius:18px;
+}
+
+/* 查看总榜（第1张）保持当前比例不动；其余5张再轻微放大一点点，四周只多裁少量 */
+.home-card:nth-child(n+2) img{
+  transform:scale(1.025);
 }
 
 .home-card:hover{
