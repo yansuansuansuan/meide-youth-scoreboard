@@ -45,7 +45,7 @@ function rankingPage(kind='total'){
   const headBg=isActivity?'assets/activity_head.jpg':'assets/total_head.jpg';
   const activityLabel=act?`${fmtDate(act.date)} · ${act.title}`:'请选择活动';
   return `
-  <div class="${isActivity?'activity-bgpage':''}">
+  <div class="${isActivity?'activity-bgpage':'total-bgpage'}">
   <section class="page-shell ${isActivity?'activity-page':'total-page'}">
     <div class="banner-wrap ranking-hero ${isActivity?'activity-hero':'total-hero'}">
       <img class="banner-desktop" src="${headBg}" alt="${isActivity?'活动榜':'总榜'}头图">
@@ -62,8 +62,8 @@ function rankingPage(kind='total'){
         <div class="table-wrap">${tableHtml(rows)}</div>
       </div>
       <div class="ranking-footer">
-        <img class="footer-desktop" src="${isActivity?'assets/activity_foot.jpg':'assets/total_footer.png'}" alt="尾图">
-        <img class="footer-mobile" src="${isActivity?'assets/activity_foot.jpg':'assets/total_footer.png'}" alt="尾图">
+        <img class="footer-desktop" src="${isActivity?'assets/activity_foot.jpg':'assets/total_foot.jpg'}" alt="尾图">
+        <img class="footer-mobile" src="${isActivity?'assets/activity_foot.jpg':'assets/total_foot.jpg'}" alt="尾图">
       </div>
     </div>
   </section>
