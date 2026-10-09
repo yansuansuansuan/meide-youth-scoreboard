@@ -1,4 +1,4 @@
-/* 首页六个功能入口：恢复留白卡片样式，统一居中显示 */
+/* 首页六个功能入口：保留白色卡片边距，图片统一居中并填满可视区域 */
 .home-inner{
   width:min(1040px,calc(100% - 28px));
   margin:0 auto;
@@ -28,15 +28,18 @@
   box-shadow:0 12px 26px rgba(93,109,68,.14);
 }
 
+/* 六张图都使用同一显示尺寸。
+   查看总榜本来就是这个效果，因此它视觉上保持不变；
+   其余五张只修正“缩得太小”的问题，不再额外放大或缩放。 */
 .home-card img{
   position:static;
   display:block;
   width:100%;
   height:100%;
-  max-width:100%;
-  margin:0 auto;
+  max-width:none;
+  margin:0;
   padding:0;
-  object-fit:contain;
+  object-fit:cover;
   object-position:center center;
   transform:none;
   border-radius:18px;
@@ -45,12 +48,6 @@
 .home-card:hover{
   transform:translateY(-4px);
   box-shadow:0 18px 34px rgba(93,109,68,.2);
-}
-
-/* 只修正“查看总榜”这一张的比例，其余五张完全按原图比例完整显示 */
-.home-card:first-child img{
-  object-fit:cover;
-  object-position:center center;
 }
 
 /* 首页头图：始终跟随浏览器/页面宽度等比例缩放，不固定最大宽度或高度 */
