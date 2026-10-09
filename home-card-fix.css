@@ -1,13 +1,12 @@
-/* 首页六个功能入口：统一尺寸、居中、无多余边距 */
+/* 首页六个功能入口：恢复留白卡片样式，统一居中显示 */
 .home-inner{
-  width:min(1040px,100%);
+  width:min(1040px,calc(100% - 28px));
   margin:0 auto;
-  padding:0;
 }
 
 .home-cards{
   width:100%;
-  max-width:1040px;
+  max-width:980px;
   margin:22px auto 0;
   padding:0;
   align-items:stretch;
@@ -15,41 +14,43 @@
 }
 
 .home-card{
-  position:relative;
-  display:block;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   width:100%;
   aspect-ratio:2 / 1;
   margin:0;
-  padding:0;
+  padding:12px;
   overflow:hidden;
   border:0;
   border-radius:26px;
-  background:transparent;
-  box-shadow:none;
+  background:#fff;
+  box-shadow:0 12px 26px rgba(93,109,68,.14);
 }
 
 .home-card img{
-  position:absolute;
-  inset:0;
+  position:static;
+  display:block;
   width:100%;
   height:100%;
-  max-width:none;
-  margin:0;
+  max-width:100%;
+  margin:0 auto;
   padding:0;
-  object-fit:cover;
+  object-fit:contain;
   object-position:center center;
-  transform:scale(1.08);
-  transform-origin:center center;
+  transform:none;
+  border-radius:18px;
 }
 
 .home-card:hover{
-  transform:translateY(-3px);
-  box-shadow:none;
+  transform:translateY(-4px);
+  box-shadow:0 18px 34px rgba(93,109,68,.2);
 }
 
-/* 生成图自带留白略有差异，后四张稍微多裁一点，让六张视觉尺寸一致 */
-.home-card:nth-child(n+3) img{
-  transform:scale(1.12);
+/* 只修正“查看总榜”这一张的比例，其余五张完全按原图比例完整显示 */
+.home-card:first-child img{
+  object-fit:cover;
+  object-position:center center;
 }
 
 /* 首页头图：始终跟随浏览器/页面宽度等比例缩放，不固定最大宽度或高度 */
@@ -76,9 +77,10 @@
 }
 
 @media (max-width:820px){
-  .home-inner{width:100%;}
-  .home-cards{width:100%;margin-top:14px;}
-  .home-card{border-radius:18px;}
+  .home-inner{width:min(100% - 20px,1040px);}
+  .home-cards{width:100%;margin-top:14px;gap:12px;}
+  .home-card{padding:8px;border-radius:18px;}
+  .home-card img{border-radius:13px;}
   .home-banner .banner-desktop{display:none!important;}
   .home-banner .banner-mobile{
     display:block!important;
