@@ -45,6 +45,7 @@ function rankingPage(kind='total'){
   const headBg=isActivity?'assets/activity_head.jpg':'assets/total_head.jpg';
   const activityLabel=act?`${fmtDate(act.date)} · ${act.title}`:'请选择活动';
   return `
+  <div class="${isActivity?'activity-bgpage':''}">
   <section class="page-shell ${isActivity?'activity-page':'total-page'}">
     <div class="banner-wrap ranking-hero ${isActivity?'activity-hero':'total-hero'}">
       <img class="banner-desktop" src="${headBg}" alt="${isActivity?'活动榜':'总榜'}头图">
@@ -61,11 +62,12 @@ function rankingPage(kind='total'){
         <div class="table-wrap">${tableHtml(rows)}</div>
       </div>
       <div class="ranking-footer">
-        <img class="footer-desktop" src="${isActivity?'assets/activity_footer.png':'assets/total_footer.png'}" alt="尾图">
-        <img class="footer-mobile" src="${isActivity?'assets/activity_footer.png':'assets/total_footer.png'}" alt="尾图">
+        <img class="footer-desktop" src="${isActivity?'assets/activity_foot.jpg':'assets/total_footer.png'}" alt="尾图">
+        <img class="footer-mobile" src="${isActivity?'assets/activity_foot.jpg':'assets/total_footer.png'}" alt="尾图">
       </div>
     </div>
-  </section>`}
+  </section>
+  </div>`}
 function podiumHtml(rows){const order=[1,0,2],cls=['second','first','third']; return `<div class="podium">${order.map((idx,i)=>{const r=rows[idx]; if(!r)return '<div></div>'; return `<div class="podium-item ${cls[i]}"><div class="medal">${idx+1}</div><img class="avatar" src="${avatarOf(r.child)}" alt=""><strong>${esc(r.child.name)}</strong><div class="p-score">${r.points} 分</div><div class="p-meta">参与 ${r.activities} 场活动</div></div>`}).join('')}</div>`}
 function tableHtml(rows){ if(!rows.length) return `<div class="empty"><img src="assets/no_photo.png" alt=""><div>暂时还没有积分记录</div></div>`; return `<table class="rank-table"><thead><tr><th>排名</th><th>姓名</th><th>参与活动</th><th>积分</th></tr></thead><tbody>${rows.map((r,i)=>`<tr data-name="${esc(r.child.name)}"><td><span class="rank-num">${String(i+1).padStart(2,'0')}</span></td><td>${esc(r.child.name)}</td><td>参加 ${r.activities} 场</td><td class="score">${r.points} 分</td></tr>`).join('')}</tbody></table>`}
 function profilePage(){const child=byId(state.children,state.selectedChild)||state.children[0]; if(!child)return ''; const entries=state.ledger.filter(x=>x.childId===child.id).sort((a,b)=>String(b.date).localeCompare(String(a.date))); const total=entries.reduce((s,e)=>s+(+e.points||0),0); const acts=new Set(entries.map(x=>x.activityId)).size; return `
