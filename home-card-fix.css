@@ -1,19 +1,55 @@
-/* 首页六个功能入口：让可点击卡片尺寸与横幅图片本体一致，裁掉生成图上下的白边 */
+/* 首页六个功能入口：统一尺寸、居中、无多余边距 */
+.home-inner{
+  width:min(1040px,100%);
+  margin:0 auto;
+  padding:0;
+}
+
+.home-cards{
+  width:100%;
+  max-width:1040px;
+  margin:22px auto 0;
+  padding:0;
+  align-items:stretch;
+  justify-items:stretch;
+}
+
 .home-card{
   position:relative;
+  display:block;
+  width:100%;
   aspect-ratio:2 / 1;
+  margin:0;
+  padding:0;
   overflow:hidden;
+  border:0;
+  border-radius:26px;
   background:transparent;
+  box-shadow:none;
 }
 
 .home-card img{
   position:absolute;
-  left:0;
-  top:50%;
+  inset:0;
   width:100%;
-  height:auto;
+  height:100%;
   max-width:none;
-  transform:translateY(-50%);
+  margin:0;
+  padding:0;
+  object-fit:cover;
+  object-position:center center;
+  transform:scale(1.08);
+  transform-origin:center center;
+}
+
+.home-card:hover{
+  transform:translateY(-3px);
+  box-shadow:none;
+}
+
+/* 生成图自带留白略有差异，后四张稍微多裁一点，让六张视觉尺寸一致 */
+.home-card:nth-child(n+3) img{
+  transform:scale(1.12);
 }
 
 /* 首页头图：始终跟随浏览器/页面宽度等比例缩放，不固定最大宽度或高度 */
@@ -40,6 +76,9 @@
 }
 
 @media (max-width:820px){
+  .home-inner{width:100%;}
+  .home-cards{width:100%;margin-top:14px;}
+  .home-card{border-radius:18px;}
   .home-banner .banner-desktop{display:none!important;}
   .home-banner .banner-mobile{
     display:block!important;
