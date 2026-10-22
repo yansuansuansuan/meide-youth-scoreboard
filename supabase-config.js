@@ -1,6 +1,6 @@
-// 配置专用 Supabase 项目后填写公开地址和 publishable key。
-// publishable key 允许出现在前端；绝对不要填写 secret/service_role key。
+// 美德少年独立 Supabase 项目。此处仅包含允许公开的 publishable key。
+// 不要在静态网站中放入 secret / service_role key。
 window.MEIDE_SUPABASE_CONFIG = {
-  url: "",
-  publishableKey: ""
+  url: "https://ydarrhupynwhjpqperqc.supabase.co",
+  publishableKey: "sb_publishable_U24qYTkoxJ1p0qtFJH-umg_iHNGYPKk"
 };
