@@ -18,7 +18,7 @@
   async function allRows(table, columns) {
     const result = [], size = 1000, db = getClient();
     for (let start = 0; ; start += size) {
-      const {data,error} = await db.from(table).select(columns).range(start,start+size-1);
+      const {data,error} = await db.from(table).select(columns).order("id",{ascending:true}).range(start,start+size-1);
       if (error) throw error;
       const rows = data || [];
       result.push(...rows);
