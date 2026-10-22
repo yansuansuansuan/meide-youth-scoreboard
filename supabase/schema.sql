@@ -117,7 +117,7 @@ create policy meide_scores_admin_read on public.meide_public_scores for select t
 using (exists (select 1 from public.meide_admins where user_id = (select auth.uid())));
 
 -- 不允许浏览器用户自行变更管理员名单或公开榜单。
-revoke all on table public.meide_admins, public.meide_children, public.meide_activities, public.meide_ledger, public.meide_public_scores from anon, authenticated;
+revoke all on table public.meide_admins, public.meide_children, public.meide_activities, public.meide_ledger, public.meide_public_scores from public, anon, authenticated;
 grant usage on schema public to anon, authenticated;
 grant select on public.meide_children, public.meide_activities, public.meide_public_scores to anon;
 grant select, insert, update, delete on public.meide_children, public.meide_activities, public.meide_ledger to authenticated;
