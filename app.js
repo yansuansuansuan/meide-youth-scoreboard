@@ -8,12 +8,28 @@ const hashCode=s=>[...String(s)].reduce((a,c)=>((a<<5)-a)+c.charCodeAt(0)|0,0);
 const byId=(arr,id)=>arr.find(x=>x.id===id);
 function toast(msg){const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600)}
 async function loadData(){
-  const files=['children','activities','ledger','gallery','settings'];
-  const vals=await Promise.all(files.map(f=>fetch(`data/${f}.json?${Date.now()}`).then(r=>r.json())));
-  state.children=vals[0]; state.activities=vals[1]; state.ledger=vals[2]; state.gallery=vals[3]; state.settings=vals[4];
-  state.selectedActivity=state.activities[0]?.id || null;
-  state.selectedChild=state.children[0]?.id || null;
+  // 数据库未配置前继续读取原有静态演示数据；配置后只用云端积分数据。
+  const [gallery,settings]=await Promise.all(['gallery','settings'].map(
+    name=>fetch('data/'+name+'.json?'+Date.now()).then(r=>{if(!r.ok)throw new Error(name+' 加载失败');return r.json()})
+  ));
+  let scoreData;
+  if(window.MeideCloud && window.MeideCloud.configured()){
+    scoreData=await window.MeideCloud.loadPublic();
+  }else{
+    const [children,activities,ledger]=await Promise.all(['children','activities','ledger'].map(
+      name=>fetch('data/'+name+'.json?'+Date.now()).then(r=>{if(!r.ok)throw new Error(name+' 加载失败');return r.json()})
+    ));
+    scoreData={children,activities,ledger};
+  }
+  state.children=scoreData.children;
+  state.activities=scoreData.activities;
+  state.ledger=scoreData.ledger;
+  state.gallery=gallery;
+  state.settings=settings;
+  if(!state.activities.some(a=>a.id===state.selectedActivity)) state.selectedActivity=state.activities[0]?.id||null;
+  if(!state.children.some(c=>c.id===state.selectedChild)) state.selectedChild=state.children[0]?.id||null;
 }
+
 function totals(activityId=null){
   const rows=state.children.filter(c=>c.active!==false).map(c=>({child:c,points:0,activities:new Set(),count:0}));
   const map=new Map(rows.map(r=>[r.child.id,r]));
@@ -76,7 +92,7 @@ function profilePage(){const child=byId(state.children,state.selectedChild)||sta
     <aside class="aside-box"><strong>选择孩子</strong><div class="child-list">${state.children.map(c=>`<button class="child-btn ${c.id===child.id?'active':''}" data-child="${c.id}">${esc(c.name)}</button>`).join('')}</div></aside>
     <section class="main-box"><div class="profile-head"><img class="avatar" src="${avatarOf(child)}" alt=""><div><h2 style="margin:0 0 6px">${esc(child.name)}</h2><div class="meta">个人成长记录</div></div></div>
       <div class="stat-grid"><div class="stat">累计积分<b>${total}</b></div><div class="stat">参与活动<b>${acts}</b></div><div class="stat">积分记录<b>${entries.length}</b></div></div>
-      <h3>积分流水</h3><div class="timeline">${entries.length?entries.map(e=>{const a=byId(state.activities,e.activityId); return `<div class="event"><strong>${e.points>=0?'+':''}${e.points} 分 · ${esc(e.reason)}</strong><div>${esc(a?.title||'未命名活动')}</div><div class="meta">${fmtDate(e.date)} · 录入：${esc(e.operator||'管理员')}</div></div>`}).join(''):`<div class="empty"><img src="assets/loading_photo.png" alt=""><div>还没有成长记录</div></div>`}</div>
+      <h3>积分流水</h3><div class="timeline">${entries.length?entries.map(e=>{const a=byId(state.activities,e.activityId); return `<div class="event"><strong>${e.points>=0?'+':''}${e.points} 分 · ${esc(e.reason||'活动积分记录')}</strong><div>${esc(a?.title||'未命名活动')}</div><div class="meta">${fmtDate(e.date)}${e.operator?' · 录入：'+esc(e.operator):''}</div></div>`}).join(''):`<div class="empty"><img src="assets/loading_photo.png" alt=""><div>还没有成长记录</div></div>`}</div>
     </section>
   </div></div>
 </section>`}
@@ -92,4 +108,35 @@ function bindPage(routeName){
 }
 function render(){const route=(location.hash||'#/home').replace(/^#\//,''); const app=$('#app'); const pages={home:homePage,total:()=>rankingPage('total'),activity:()=>rankingPage('activity'),profile:profilePage,intro:introPage,gallery:galleryPage,signup:signupPage}; app.innerHTML=(pages[route]||pages.home)(); bindPage(route); window.scrollTo({top:0,behavior:'instant'})}
 window.addEventListener('hashchange',render);
-document.addEventListener('DOMContentLoaded', async()=>{ $('#menuBtn').onclick=()=>$('#nav').classList.toggle('open'); await loadData(); render(); });
+async function refreshCloudIfChanged(){
+  if(!window.MeideCloud?.configured() || document.visibilityState!=='visible') return;
+  const route=(location.hash||'#/home').replace(/^#\//,'');
+  if(!['total','activity','profile'].includes(route)) return;
+  try {
+    const data=await window.MeideCloud.loadPublic();
+    const previous=JSON.stringify([state.children,state.activities,state.ledger]);
+    if(JSON.stringify([data.children,data.activities,data.ledger])===previous) return;
+    const y=window.scrollY, query=$('#searchInput')?.value||'';
+    state.children=data.children;
+    state.activities=data.activities;
+    state.ledger=data.ledger;
+    if(!state.activities.some(a=>a.id===state.selectedActivity))state.selectedActivity=state.activities[0]?.id||null;
+    if(!state.children.some(a=>a.id===state.selectedChild))state.selectedChild=state.children[0]?.id||null;
+    render();
+    const search=$('#searchInput');
+    if(search&&query){search.value=query;search.dispatchEvent(new Event('input'));}
+    window.scrollTo(0,y);
+  }catch(e){console.warn('云端积分刷新失败',e);}
+}
+document.addEventListener('DOMContentLoaded', async()=>{
+  $('#menuBtn').onclick=()=>$('#nav').classList.toggle('open');
+  try{await loadData();render();}
+  catch(e){
+    console.error('美德少年数据加载失败',e);
+    $('#app').innerHTML='<div class="container" style="padding:44px 20px;text-align:center"><h2>数据暂时无法加载</h2><p>请稍后刷新重试，积分数据并未丢失。</p><button class="btn btn-primary" onclick="location.reload()">重新加载</button></div>';
+  }
+  if(window.MeideCloud?.configured()) {
+    setInterval(refreshCloudIfChanged,20000);
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshCloudIfChanged();});
+  }
+});
