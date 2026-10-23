@@ -1,0 +1,399 @@
+{
+  "ledger": [
+    {
+      "id": "ledger_meide-signin-01-row-01",
+      "date": "2026-09-06",
+      "points": 12,
+      "childId": "child_meide-signin-01-row-01",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-02",
+      "date": "2026-09-06",
+      "points": 13,
+      "childId": "child_meide-signin-01-row-02",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-03",
+      "date": "2026-09-06",
+      "points": 20,
+      "childId": "child_meide-signin-01-row-03",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-05",
+      "date": "2026-09-06",
+      "points": 10,
+      "childId": "child_meide-signin-01-row-05",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-06",
+      "date": "2026-09-06",
+      "points": 51,
+      "childId": "child_meide-signin-01-row-06",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-07",
+      "date": "2026-09-06",
+      "points": 22,
+      "childId": "child_meide-signin-01-row-07",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-08",
+      "date": "2026-09-06",
+      "points": 4,
+      "childId": "child_meide-signin-01-row-08",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-09",
+      "date": "2026-09-06",
+      "points": 24,
+      "childId": "child_meide-signin-01-row-09",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-10",
+      "date": "2026-09-06",
+      "points": 11,
+      "childId": "child_meide-signin-01-row-10",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-11",
+      "date": "2026-09-06",
+      "points": 36,
+      "childId": "child_meide-signin-01-row-11",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-14",
+      "date": "2026-09-06",
+      "points": 50,
+      "childId": "child_meide-signin-01-row-14",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-15",
+      "date": "2026-09-06",
+      "points": 10,
+      "childId": "child_meide-signin-01-row-15",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-01-row-20",
+      "date": "2026-09-06",
+      "points": 3,
+      "childId": "child_meide-signin-01-row-20",
+      "activityId": "meide-signin-01"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-02",
+      "date": "2026-10-07",
+      "points": 0,
+      "childId": "child_meide-signin-02-row-02",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-03",
+      "date": "2026-10-07",
+      "points": 0,
+      "childId": "child_meide-signin-02-row-03",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-04",
+      "date": "2026-10-07",
+      "points": 15,
+      "childId": "child_meide-signin-02-row-04",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-05",
+      "date": "2026-10-07",
+      "points": 8.5,
+      "childId": "child_meide-signin-02-row-05",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-06",
+      "date": "2026-10-07",
+      "points": 1.4,
+      "childId": "child_meide-signin-02-row-06",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-07",
+      "date": "2026-10-07",
+      "points": 48,
+      "childId": "child_meide-signin-02-row-07",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-08",
+      "date": "2026-10-07",
+      "points": 27,
+      "childId": "child_meide-signin-02-row-08",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-09",
+      "date": "2026-10-07",
+      "points": 0,
+      "childId": "child_meide-signin-02-row-09",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-12",
+      "date": "2026-10-07",
+      "points": 5,
+      "childId": "child_meide-signin-02-row-12",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-13",
+      "date": "2026-10-07",
+      "points": 60,
+      "childId": "child_meide-signin-02-row-13",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-14",
+      "date": "2026-10-07",
+      "points": 0,
+      "childId": "child_meide-signin-02-row-14",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-15",
+      "date": "2026-10-07",
+      "points": 12,
+      "childId": "child_meide-signin-02-row-15",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-16",
+      "date": "2026-10-07",
+      "points": 35,
+      "childId": "child_meide-signin-02-row-16",
+      "activityId": "meide-signin-02"
+    },
+    {
+      "id": "ledger_meide-signin-02-row-18",
+      "date": "2026-10-07",
+      "points": 0,
+      "childId": "child_meide-signin-02-row-18",
+      "activityId": "meide-signin-02"
+    }
+  ],
+  "children": [
+    {
+      "id": "child_meide-signin-01-row-01",
+      "name": "徐开智",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-02",
+      "name": "徐梓妍",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-03",
+      "name": "贺筱迪",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-05",
+      "name": "杨章溢",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-06",
+      "name": "蒋庭",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-07",
+      "name": "孔舒妍",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-08",
+      "name": "秦凡雯",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-09",
+      "name": "丁晞文",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-10",
+      "name": "汤嘉泽",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-11",
+      "name": "储德清",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-14",
+      "name": "雷笑言",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-15",
+      "name": "周筱冉",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-01-row-20",
+      "name": "陈乐心",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-02",
+      "name": "尹辰皓",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-03",
+      "name": "黄锦霖",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-04",
+      "name": "陈荟萃",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-05",
+      "name": "徐锦翕",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-06",
+      "name": "刘思高",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-07",
+      "name": "李思其",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-08",
+      "name": "赵小鱼",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-09",
+      "name": "邹艺鸣",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-12",
+      "name": "朱希正",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-13",
+      "name": "王嘉雯",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-14",
+      "name": "王子杰",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-15",
+      "name": "方睿晨",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-16",
+      "name": "胡雪杨",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    },
+    {
+      "id": "child_meide-signin-02-row-18",
+      "name": "涂展赫",
+      "active": true,
+      "avatar": null,
+      "participant_type": "child"
+    }
+  ],
+  "activities": [
+    {
+      "id": "meide-signin-02",
+      "date": "2026-10-07",
+      "title": "第二场活动",
+      "status": "finished"
+    },
+    {
+      "id": "meide-signin-01",
+      "date": "2026-09-06",
+      "title": "第一场活动",
+      "status": "finished"
+    }
+  ],
+  "generatedAt": "2026-10-23T04:16:57Z"
+}
