@@ -82,7 +82,7 @@ function rankingPage(kind='total'){
   </div>`}
 function podiumHtml(rows){const order=[1,0,2],cls=['second','first','third']; return `<div class="podium">${order.map((idx,i)=>{const r=rows[idx]; if(!r)return '<div></div>'; return `<div class="podium-item ${cls[i]}"><div class="medal">${idx+1}</div><img class="avatar" src="${avatarOf(r.child)}" alt=""><strong>${esc(r.child.name)}</strong><div class="p-score">${r.points} 分</div><div class="p-meta">参与 ${r.activities} 场活动</div></div>`}).join('')}</div>`}
 function tableHtml(rows){ if(!rows.length) return `<div class="empty"><img src="assets/no_photo.png" alt=""><div>暂时还没有积分记录</div></div>`; return `<table class="rank-table"><thead><tr><th>排名</th><th>姓名</th><th>参与活动</th><th>积分</th></tr></thead><tbody>${rows.map((r,i)=>`<tr data-name="${esc(r.child.name)}"><td><span class="rank-num">${String(i+1).padStart(2,'0')}</span></td><td>${esc(r.child.name)}</td><td>参加 ${r.activities} 场</td><td class="score">${r.points} 分</td></tr>`).join('')}</tbody></table>`}
-function profilePage(){const child=byId(state.children,state.selectedChild)||state.children[0]; if(!child)return ''; const entries=state.ledger.filter(x=>x.childId===child.id).sort((a,b)=>String(b.date).localeCompare(String(a.date))); const total=entries.reduce((s,e)=>s+(+e.points||0),0); const acts=new Set(entries.map(x=>x.activityId)).size; return `
+function profilePage(){const child=byId(state.children,state.selectedChild)||state.children[0]; if(!child)return '<section class="content-pad"><div class="container"><div class="card" style="text-align:center;padding:50px 20px"><h2>成长档案尚未建立</h2><p>管理员添加第一位孩子后，成长档案就会在这里显示。</p></div></div></section>'; const entries=state.ledger.filter(x=>x.childId===child.id).sort((a,b)=>String(b.date).localeCompare(String(a.date))); const total=entries.reduce((s,e)=>s+(+e.points||0),0); const acts=new Set(entries.map(x=>x.activityId)).size; return `
 <section>
   <div class="banner-wrap ranking-hero profile-hero">
     <img class="banner-desktop" src="assets/profile_head.jpg" alt="成长档案头图">
@@ -136,7 +136,18 @@ document.addEventListener('DOMContentLoaded', async()=>{
     $('#app').innerHTML='<div class="container" style="padding:44px 20px;text-align:center"><h2>数据暂时无法加载</h2><p>请稍后刷新重试，积分数据并未丢失。</p><button class="btn btn-primary" onclick="location.reload()">重新加载</button></div>';
   }
   if(window.MeideCloud?.configured()) {
+    // Supabase Postgres Changes: 数据保存后主动通知榜单刷新。
+    // 备用轮询保留，网络断开或客户端未收到事件时仍可自动恢复。
+    try {
+      window.MeideCloud.getClient()
+        .channel('meide-scoreboard-public-updates')
+        .on('postgres_changes',{event:'*',schema:'public',table:'meide_public_scores'},()=>{void refreshCloudIfChanged();})
+        .on('postgres_changes',{event:'*',schema:'public',table:'meide_children'},()=>{void refreshCloudIfChanged();})
+        .on('postgres_changes',{event:'*',schema:'public',table:'meide_activities'},()=>{void refreshCloudIfChanged();})
+        .subscribe();
+    } catch(e){console.warn('云端实时订阅暂不可用，使用定时刷新',e);}
     setInterval(refreshCloudIfChanged,20000);
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshCloudIfChanged();});
+    window.addEventListener('hashchange',()=>{void refreshCloudIfChanged();});
   }
 });
