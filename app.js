@@ -1,4 +1,4 @@
-const state={children:[],activities:[],ledger:[],gallery:[],settings:{},selectedActivity:null,selectedChild:null};
+const state={children:[],activities:[],ledger:[],gallery:[],settings:{},selectedActivity:null,selectedChild:null,profileDraft:'',profileSearched:false,profileError:''};
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const fmtDate=v=>{if(!v) return ''; const d=new Date(v+'T00:00:00'); return isNaN(d)?v:`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`};
@@ -19,7 +19,7 @@ async function loadData(){
   state.gallery=gallery; state.settings=settings;
   state.dataSource=live.source||'live'; state.lastSyncedAt=live.updatedAt||null;
   if(!state.activities.some(a=>a.id===state.selectedActivity))state.selectedActivity=state.activities[0]?.id||null;
-  if(!state.children.some(c=>c.id===state.selectedChild))state.selectedChild=state.children[0]?.id||null;
+  if(!state.children.some(c=>c.id===state.selectedChild && c.active!==false && (c.participant_type||'child')==='child'))state.selectedChild=null;
 }
 
 const displayScore=x=>String(Number(Number(x).toFixed(2)));
@@ -87,21 +87,56 @@ function tableHtml(rows){
   return `<table class="rank-table"><thead><tr><th>排名</th><th>姓名</th><th>参与活动</th><th>积分</th></tr></thead><tbody>${rows.map((r,i)=>`<tr data-name="${esc(r.child.name)}"><td><span class="rank-num">${String(rankAt(rows,i)).padStart(2,'0')}</span></td><td>${esc(r.child.name)}</td><td>参加 ${r.activities} 场</td><td class="score">${displayScore(r.points)} 分</td></tr>`).join('')}</tbody></table>`;
 }
 
-function profilePage(){const eligibleChildren=state.children.filter(c=>c.active!==false && (c.participant_type||"child")==="child");
-  const child=byId(eligibleChildren,state.selectedChild)||eligibleChildren[0]; if(!child)return '<section class="content-pad"><div class="container"><div class="card" style="text-align:center;padding:50px 20px"><h2>成长档案尚未建立</h2><p>管理员添加第一位孩子后，成长档案就会在这里显示。</p></div></div></section>'; const entries=state.ledger.filter(x=>x.childId===child.id).sort((a,b)=>String(b.date).localeCompare(String(a.date))); const total=entries.reduce((s,e)=>s+(+e.points||0),0); const acts=new Set(entries.map(x=>x.activityId)).size; return `
-<section>
-  <div class="banner-wrap ranking-hero profile-hero">
-    <img class="banner-desktop" src="assets/profile_head.jpg" alt="成长档案头图">
-    <img class="banner-mobile" src="assets/profile_head.jpg" alt="成长档案头图">
-  </div>
-  <div class="content-pad"><div class="container profile-layout">
-    <aside class="aside-box"><strong>选择孩子</strong><div class="child-list">${eligibleChildren.map(c=>`<button class="child-btn ${c.id===child.id?'active':''}" data-child="${c.id}">${esc(c.name)}</button>`).join('')}</div></aside>
-    <section class="main-box"><div class="profile-head"><img class="avatar" src="${avatarOf(child)}" alt=""><div><h2 style="margin:0 0 6px">${esc(child.name)}</h2><div class="meta">个人成长记录</div></div></div>
-      <div class="stat-grid"><div class="stat">累计积分<b>${total}</b></div><div class="stat">参与活动<b>${acts}</b></div><div class="stat">积分记录<b>${entries.length}</b></div></div>
-      <h3>积分流水</h3><div class="timeline">${entries.length?entries.map(e=>{const a=byId(state.activities,e.activityId); return `<div class="event"><strong>${e.points>=0?'+':''}${displayScore(e.points)} 分 · ${esc(e.reason||'活动积分记录')}</strong><div>${esc(a?.title||'未命名活动')}</div><div class="meta">${fmtDate(e.date)}${e.operator?' · 录入：'+esc(e.operator):''}</div></div>`}).join(''):`<div class="empty"><img src="assets/loading_photo.png" alt=""><div>还没有成长记录</div></div>`}</div>
-    </section>
-  </div></div>
-</section>`}
+function profilePage(){
+  // 不展示姓名名单。必须输入完整姓名才能打开对应档案。
+  const eligibleChildren=state.children.filter(c=>c.active!==false && (c.participant_type||"child")==="child");
+  const child=eligibleChildren.find(c=>c.id===state.selectedChild) || null;
+  const message=!state.profileSearched
+    ? '请输入孩子的完整姓名，搜索后查看成长档案。'
+    : (state.profileError || '请输入孩子的完整姓名。');
+  let detail='<div class="profile-search-empty" role="status">'+esc(message)+'</div>';
+  if(child){
+    const entries=state.ledger.filter(x=>x.childId===child.id).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+    const total=entries.reduce((sum,e)=>sum+(Number(e.points)||0),0);
+    const acts=new Set(entries.map(x=>x.activityId)).size;
+    detail=`<div class="main-box">
+      <div class="profile-head"><img class="avatar" src="${avatarOf(child)}" alt=""><div><h2 style="margin:0 0 6px">${esc(child.name)}</h2><div class="meta">个人成长记录</div></div></div>
+      <div class="stat-grid">
+        <div class="stat">累计积分<b>${displayScore(total)}</b></div>
+        <div class="stat">参与活动<b>${acts}</b></div>
+        <div class="stat">积分记录<b>${entries.length}</b></div>
+      </div>
+      <h3>积分流水</h3>
+      <div class="timeline">${entries.length?entries.map(e=>{
+        const a=byId(state.activities,e.activityId);
+        return `<div class="event">
+          <strong>${e.points>=0?'+':''}${displayScore(e.points)} 分 · ${esc(e.reason||'活动积分记录')}</strong>
+          <div>${esc(a?.title||'未命名活动')}</div>
+          <div class="meta">${esc(fmtDate(e.date))}${e.operator?' · 录入：'+esc(e.operator):''}</div>
+        </div>`;
+      }).join(''):'<div class="empty">还没有成长记录</div>'}</div>
+    </div>`;
+  }
+  return `<section>
+    <div class="banner-wrap ranking-hero profile-hero">
+      <img class="banner-desktop" src="assets/profile_head.jpg" alt="成长档案头图">
+      <img class="banner-mobile" src="assets/profile_head.jpg" alt="成长档案头图">
+    </div>
+    <div class="content-pad"><div class="container profile-search-layout">
+      <form id="profileSearchForm" class="profile-search-form" role="search" autocomplete="off">
+        <label class="profile-search-label" for="profileNameInput">查找成长档案</label>
+        <div class="profile-search-control">
+          <input id="profileNameInput" type="search" class="search" name="name" maxlength="40"
+            placeholder="请输入孩子的完整姓名" value="${esc(state.profileDraft||'')}"
+            enterkeyhint="search" autocapitalize="off" spellcheck="false" required>
+          <button type="submit" class="profile-search-submit" aria-label="搜索成长档案" title="搜索">⌕</button>
+        </div>
+      </form>
+      <div id="profileResult">${detail}</div>
+    </div></div>
+  </section>`;
+}
+
 function introPage(){return `<section><div class="banner-wrap ranking-hero"><img class="banner-desktop" src="assets/intro_head.jpg" alt="系列活动介绍"><img class="banner-mobile" src="assets/intro_head.jpg" alt="系列活动介绍"></div></section><div class="content-pad"><div class="container intro-grid"><article class="card"><h2>什么是美德少年成长积分榜？</h2><p>这是一个用于记录系列活动参与情况的成长展示平台。每位孩子参加活动、完成任务、展现合作与责任，都会以“积分流水”的方式沉淀下来，最终自动汇总到总榜和活动榜中。</p></article><div class="point-list"><div class="point"><b>🌱 长期积累</b><div class="meta">每场活动积分自动汇总到总榜。</div></div><div class="point"><b>🏅 活动展示</b><div class="meta">每一场活动都能单独生成活动榜。</div></div><div class="point"><b>📒 成长档案</b><div class="meta">查看单个孩子的参与与积分流水。</div></div><div class="point"><b>📷 往期精彩</b><div class="meta">活动结束后上传精选照片长期保留。</div></div></div></div></div></section>`}
 function galleryPage(){
  const realPhotos=state.gallery.filter(g=>g&&g.cover&&!g.cover.includes('placeholder'));
@@ -113,11 +148,46 @@ function bindPage(routeName){
   $$('.nav a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')===`#/${routeName}`));
   const input=$('#searchInput'); if(input){input.oninput=()=>$$('.rank-table tbody tr').forEach(tr=>tr.style.display=!input.value||tr.dataset.name.includes(input.value)?'':'none')}
   const sel=$('#actSel'); if(sel){sel.onchange=()=>{state.selectedActivity=sel.value; render()}}
-  $$('[data-child]').forEach(b=>b.onclick=()=>{state.selectedChild=b.dataset.child; render()})
+  const profileInput=$('#profileNameInput');
+  const profileForm=$('#profileSearchForm');
+  if(profileInput && profileForm){
+    profileInput.addEventListener('input',()=>{
+      state.profileDraft=profileInput.value;
+      state.selectedChild=null; state.profileSearched=false; state.profileError='';
+      const result=$('#profileResult');
+      if(result) result.innerHTML='<div class="profile-search-empty" role="status">请输入完整姓名并点击搜索，查看对应的成长档案。</div>';
+    });
+    profileForm.addEventListener('submit',event=>{
+      event.preventDefault();
+      const name=profileInput.value.trim();
+      state.profileDraft=name;
+      state.profileSearched=true;
+      state.selectedChild=null;
+      state.profileError='';
+      const matches=state.children.filter(c=>c.active!==false
+        && (c.participant_type||'child')==='child' && c.name.trim()===name);
+      if(matches.length===1){
+        state.selectedChild=matches[0].id;
+      }else if(matches.length>1){
+        state.profileError='找到同名档案，请联系管理员核对。';
+      }else{
+        state.profileError='没有找到对应的成长档案，请核对姓名后重试。';
+      }
+      render();
+    });
+  }
   $$('[data-copy]').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.copy);toast('链接已复制')}catch(e){toast('复制失败，请手动复制')}})
 }
 function render(){const route=(location.hash||'#/home').replace(/^#\//,''); const app=$('#app'); const pages={home:homePage,total:()=>rankingPage('total'),activity:()=>rankingPage('activity'),profile:profilePage,intro:introPage,gallery:galleryPage,signup:signupPage}; app.innerHTML=(pages[route]||pages.home)(); bindPage(route); window.scrollTo({top:0,behavior:'instant'})}
-window.addEventListener('hashchange',render);
+let lastRoute=(location.hash||'#/home').replace(/^#\//,'');
+window.addEventListener('hashchange',()=>{
+  const route=(location.hash||'#/home').replace(/^#\//,'');
+  if(route==='profile' && lastRoute!=='profile'){
+    state.selectedChild=null;state.profileDraft='';state.profileSearched=false;state.profileError='';
+  }
+  lastRoute=route;
+  render();
+});
 async function refreshCloudIfChanged(){
   if(!window.MeideCloud?.configured() || document.visibilityState!=='visible') return;
   const route=(location.hash||'#/home').replace(/^#\//,'');
@@ -133,7 +203,11 @@ async function refreshCloudIfChanged(){
     state.dataSource=data.source||"live";
     state.lastSyncedAt=data.updatedAt||null;
     if(!state.activities.some(a=>a.id===state.selectedActivity))state.selectedActivity=state.activities[0]?.id||null;
-    if(!state.children.some(a=>a.id===state.selectedChild && a.participant_type!=="university_volunteer"))state.selectedChild=state.children.find(c=>c.participant_type!=="university_volunteer")?.id||null;
+    if(!state.children.some(a=>a.id===state.selectedChild && a.active!==false && (a.participant_type||'child')==='child'))state.selectedChild=null;
+    if(state.selectedChild && state.profileSearched){
+      const selected=state.children.find(c=>c.id===state.selectedChild);
+      if(!selected || selected.name!==state.profileDraft)state.selectedChild=null;
+    }
     render();
     const search=$('#searchInput');
     if(search&&query){search.value=query;search.dispatchEvent(new Event('input'));}
