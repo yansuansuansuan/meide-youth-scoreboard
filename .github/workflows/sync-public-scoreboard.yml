@@ -1,6 +1,12 @@
 name: Sync public Meide scoreboard backup
 
 on:
+  # Run one check when this sync logic is updated, besides scheduled checks.
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-public-scoreboard.yml"
+      - "scripts/sync_public_scores.py"
   schedule:
     # GitHub may delay scheduled jobs. This is backup refresh, not realtime.
     - cron: "*/5 * * * *"
