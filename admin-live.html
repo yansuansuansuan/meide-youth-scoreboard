@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>在线积分管理｜美德少年</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .workwrap{width:min(1120px,calc(100% - 28px));margin:25px auto 70px}
+    .workhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .workcard{background:#fff;border:1px solid #eaddbc;border-radius:20px;padding:22px;margin-top:18px;box-shadow:0 8px 25px rgba(90,67,30,.07)}
+    .workcard h2{margin:0 0 14px}
+    .workgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .workform{display:grid;gap:12px}
+    .workform label{display:grid;gap:6px;font-weight:600}
+    .workform input,.workform select{padding:12px;border:1px solid #dccda7;border-radius:12px;background:#fffdfa;min-width:0;width:100%;font-size:16px}
+    .workform .btn{min-height:46px}
+    .hint{color:#806e5a;font-size:14px;line-height:1.7}
+    .status{margin-top:14px;padding:13px 15px;border-radius:12px;background:#fff3d9;color:#6c4b1e}
+    .status.ok{background:#ebf8dc;color:#35651c}
+    .record{padding:10px 0;border-bottom:1px solid #f0e6d4;display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .record div{flex:1;min-width:0}
+    .record small{display:block;color:#837364;margin-top:3px}
+    .btn.small{padding:7px 12px;border-radius:10px;box-shadow:none}
+    [hidden]{display:none!important}
+    @media(max-width:740px){.workgrid{grid-template-columns:1fr}.workcard{padding:16px}}
+  </style>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="scoreboard-preview.html#/home"><img src="assets/mascot.png" alt="芽芽"><span>美德少年 · 在线积分管理</span></a><a href="scoreboard-preview.html#/home" class="btn btn-ghost">返回网站</a></header>
+  <main class="workwrap">
+    <div class="workhead">
+      <div><h1>积分实时录入</h1><div class="hint">保存即写入数据库，无须下载 JSON 或手动更新 GitHub。</div></div>
+      <button type="button" id="logout" class="btn btn-ghost" hidden>退出登录</button>
+    </div>
+    <div id="status" class="status" role="status" aria-live="polite">正在检查连接...</div>
+    <section id="loginPanel" class="workcard" hidden>
+      <h2>管理员登录</h2>
+      <form id="loginForm" class="workform" style="max-width:440px">
+        <label>管理员邮箱<input id="email" type="email" autocomplete="username" required></label>
+        <label>密码<input id="password" type="password" autocomplete="current-password" required></label>
+        <button class="btn btn-primary" type="submit">登录后台</button>
+      </form>
+      <p class="hint">只有被列入管理员名单的账号可以修改活动和积分；不能在这里自行注册管理员。</p>
+    </section>
+    <section id="dashboard" hidden>
+      <div class="workgrid">
+        <div class="workcard">
+          <h2>新增积分流水</h2>
+          <form id="scoreForm" class="workform">
+            <label>搜索孩子<input id="childSearch" placeholder="输入姓名筛选" autocomplete="off"></label>
+            <label>选择孩子<select id="childSelect" required></select></label>
+            <label>所属活动<select id="activitySelect" required></select></label>
+            <label>分数（支持负数纠错）<input id="points" type="number" step="1" min="-10000" max="10000" value="5" required></label>
+            <label>加分原因<input id="reason" maxlength="300" placeholder="例如：完成公益实践" required></label>
+            <label>操作人<input id="operator" maxlength="80" placeholder="例如：活动工作人员" required></label>
+            <label>活动日期<input id="scoreDate" type="date" required></label>
+            <button class="btn btn-green" type="submit">保存积分到数据库</button>
+          </form>
+        </div>
+        <div>
+          <div class="workcard">
+            <h2>新增孩子</h2>
+            <form id="childForm" class="workform">
+              <label>姓名或展示昵称<input id="childName" maxlength="40" required></label>
+              <button class="btn btn-secondary" type="submit">添加到名单</button>
+            </form>
+          </div>
+          <div class="workcard">
+            <h2>创建活动</h2>
+            <form id="activityForm" class="workform">
+              <label>活动名称<input id="activityTitle" maxlength="120" required></label>
+              <label>活动日期<input id="activityDate" type="date" required></label>
+              <button class="btn btn-secondary" type="submit">保存活动</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="workcard">
+        <h2>最近积分记录</h2>
+        <p class="hint">发现录入错误时，可撤销错误记录并重新录入。删除后公开榜单也会同步扣回相应分数。</p>
+        <div id="recentRecords"></div>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.76.1"></script>
+  <script src="supabase-config.js"></script>
+  <script src="cloud-data.js"></script>
+  <script src="admin-live.js"></script>
+</body>
+</html>

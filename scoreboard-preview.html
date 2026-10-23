@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>美德少年成长积分榜</title>
+  <meta name="theme-color" content="#88b83f">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="home-card-fix.css">
+  <link rel="stylesheet" href="responsive-media.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/home">
+      <img src="assets/mascot.png" alt="芽芽">
+      <span>美德少年成长积分榜</span>
+    </a>
+    <button id="menuBtn" class="menu-btn">☰</button>
+    <nav id="nav" class="nav">
+      <a href="#/home">首页</a>
+      <a href="#/total">总榜</a>
+      <a href="#/activity">活动榜</a>
+      <a href="#/profile">成长档案</a>
+      <a href="#/intro">活动介绍</a>
+      <a href="#/gallery">往期精彩</a>
+      <a href="#/signup">报名入口</a>
+      <a href="admin-live.html">管理员</a>
+    </nav>
+  </header>
+
+  <main id="app"></main>
+
+  <footer class="site-footer">
+    <div>美德少年成长积分榜 · 点滴积累，看见成长</div>
+    <div class="foot-small">在线积分功能预览：已连接独立云端数据库。</div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.76.1"></script>
+  <script src="supabase-config.js"></script>
+  <script src="cloud-data.js"></script>
+  <script src="app-live-preview.js"></script>
+</body>
+</html>
