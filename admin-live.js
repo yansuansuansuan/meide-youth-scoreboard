@@ -22,7 +22,7 @@
   }
   async function refreshLists() {
     const [kids,acts]=await Promise.all([
-      db.from("meide_children").select("id,name,active").order("created_at",{ascending:true}),
+      db.from("meide_children").select("id,name,active,participant_type").order("created_at",{ascending:true}),
       db.from("meide_activities").select("id,title,date").order("date",{ascending:false})
     ]);
     if(kids.error) throw kids.error;
@@ -35,7 +35,7 @@
   }
   function filterChildren(){
     const term=$("childSearch").value.trim();
-    const result=children.filter(c=>c.active!==false && c.name.includes(term));
+    const result=children.filter(c=>c.active!==false && (c.participant_type||"child")==="child" && c.name.includes(term));
     options($("childSelect"),result,c=>c.name);
     $("childSelect").disabled=!result.length;
   }
@@ -159,7 +159,7 @@
       const name=$("childName").value.trim();
       if(!name) throw new Error("请输入姓名或昵称");
       if(children.some(c=>c.name===name)) throw new Error("名单中已存在同名记录，请核对后再添加");
-      const {error}=await db.from("meide_children").insert({id:"c_"+crypto.randomUUID(),name,active:true});
+      const {error}=await db.from("meide_children").insert({id:"c_"+crypto.randomUUID(),name,active:true,participant_type:$("participantType").value});
       if(error) throw error;
       $("childName").value="";
       await refreshLists();
