@@ -59,7 +59,7 @@ function rankingPage(kind='total'){
   const rows=totals(activityId);
   const act=byId(state.activities,activityId);
   const headBg=isActivity?'assets/activity_head.jpg':'assets/total_head.jpg';
-  const activityLabel=act?`${fmtDate(act.date)} · ${act.title}`:'请选择活动';
+  const activityLabel=act?`${fmtDate(act.date)||'日期待补'} · ${act.title}`:'请选择活动';
   return `
   <div class="${isActivity?'activity-bgpage':'total-bgpage'}">
   <section class="page-shell ${isActivity?'activity-page':'total-page'}">
@@ -70,7 +70,7 @@ function rankingPage(kind='total'){
     <div class="ranking-bg">
       <div class="ranking-card">
         <div class="ranking-toolbar-top ${isActivity?'activity':''}">
-          ${isActivity?`<select id="actSel" class="select activity-select">${state.activities.map(a=>`<option value="${a.id}" ${a.id===activityId?'selected':''}>${esc(fmtDate(a.date)+' '+a.title)}</option>`).join('')}</select>`:''}
+          ${isActivity?`<select id="actSel" class="select activity-select">${state.activities.map(a=>`<option value="${a.id}" ${a.id===activityId?'selected':''}>${esc((fmtDate(a.date)||'日期待补')+' '+a.title)}</option>`).join('')}</select>`:''}
           ${isActivity?`<div class="activity-meta-line">${esc(activityLabel)}</div>`:`<div class="activity-meta-line total-meta-line">汇总全部活动积分流水</div>`}
         </div>
         ${podiumHtml(rows.slice(0,3))}
