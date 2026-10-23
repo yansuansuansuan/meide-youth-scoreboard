@@ -70,6 +70,36 @@
     });
   }
 
+  async function refreshSignupRoster() {
+    const summary=$("secondSignupSummary"), container=$("secondSignupRows");
+    if(!summary||!container)return;
+    const {data,error}=await db.from("meide_event_signups")
+      .select("name,participant_type,service_hours,attendance_status,signup_status")
+      .eq("activity_id","meide-signin-02")
+      .order("participant_type",{ascending:true})
+      .order("name",{ascending:true});
+    if(error){summary.textContent="报名名单暂时无法读取："+error.message;return;}
+    const list=data||[];
+    const youths=list.filter(x=>x.participant_type==="child");
+    const adults=list.filter(x=>x.participant_type==="university_volunteer");
+    summary.textContent="共 "+list.length+" 人报名：青少年志愿者 "+youths.length+" 人，大学生志愿者 "+adults.length+" 人。签到状态尚未核实。";
+    container.replaceChildren();
+    [
+      ["青少年志愿者（报名，不等于已到场）",youths],
+      ["大学生志愿者（不参与积分排名）",adults]
+    ].forEach(([title,people])=>{
+      const h=document.createElement("h3");h.textContent=title;container.append(h);
+      const wrapper=document.createElement("div");
+      wrapper.style.cssText="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px";
+      people.forEach(p=>{
+        const item=document.createElement("div");item.className="hint";
+        item.style.cssText="padding:10px 12px;background:#f8f7f2;border-radius:10px";
+        item.textContent=p.name+" · "+Number(p.service_hours||0).toFixed(2)+"小时";
+        wrapper.append(item);
+      });
+      container.append(wrapper);
+    });
+  }
   async function refreshReview() {
     const {data,error}=await db.from("meide_import_review")
       .select("id,activity_id,source_row,raw_name,score,score_text,review_note")
@@ -136,6 +166,7 @@
     await refreshLists();
     await refreshRecords();
     await refreshReview();
+    await refreshSignupRoster();
     showStatus("数据库连接正常。保存积分后，网站刷新即可看到最新榜单。",true);
   }
   async function transact(form,callback){
