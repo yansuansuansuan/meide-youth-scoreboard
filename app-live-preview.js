@@ -23,7 +23,7 @@ async function loadData(){
 
 const displayScore=x=>String(Number(Number(x).toFixed(2)));
 function totals(activityId=null){
-  const rows=state.children.filter(c=>c.active!==false).map(c=>({child:c,points:0,activities:new Set(),count:0}));
+  const rows=state.children.filter(c=>c.active!==false && (c.participant_type||"child")==="child").map(c=>({child:c,points:0,activities:new Set(),count:0}));
   const map=new Map(rows.map(r=>[r.child.id,r]));
   state.ledger.forEach(l=>{
     if(activityId && l.activityId!==activityId)return;
@@ -86,14 +86,15 @@ function tableHtml(rows){
   return `<table class="rank-table"><thead><tr><th>排名</th><th>姓名</th><th>参与活动</th><th>积分</th></tr></thead><tbody>${rows.map((r,i)=>`<tr data-name="${esc(r.child.name)}"><td><span class="rank-num">${String(rankAt(rows,i)).padStart(2,'0')}</span></td><td>${esc(r.child.name)}</td><td>参加 ${r.activities} 场</td><td class="score">${displayScore(r.points)} 分</td></tr>`).join('')}</tbody></table>`;
 }
 
-function profilePage(){const child=byId(state.children,state.selectedChild)||state.children[0]; if(!child)return '<section class="content-pad"><div class="container"><div class="card" style="text-align:center;padding:50px 20px"><h2>成长档案尚未建立</h2><p>管理员添加第一位孩子后，成长档案就会在这里显示。</p></div></div></section>'; const entries=state.ledger.filter(x=>x.childId===child.id).sort((a,b)=>String(b.date).localeCompare(String(a.date))); const total=entries.reduce((s,e)=>s+(+e.points||0),0); const acts=new Set(entries.map(x=>x.activityId)).size; return `
+function profilePage(){const eligibleChildren=state.children.filter(c=>c.active!==false && (c.participant_type||"child")==="child");
+  const child=byId(eligibleChildren,state.selectedChild)||eligibleChildren[0]; if(!child)return '<section class="content-pad"><div class="container"><div class="card" style="text-align:center;padding:50px 20px"><h2>成长档案尚未建立</h2><p>管理员添加第一位孩子后，成长档案就会在这里显示。</p></div></div></section>'; const entries=state.ledger.filter(x=>x.childId===child.id).sort((a,b)=>String(b.date).localeCompare(String(a.date))); const total=entries.reduce((s,e)=>s+(+e.points||0),0); const acts=new Set(entries.map(x=>x.activityId)).size; return `
 <section>
   <div class="banner-wrap ranking-hero profile-hero">
     <img class="banner-desktop" src="assets/profile_head.jpg" alt="成长档案头图">
     <img class="banner-mobile" src="assets/profile_head.jpg" alt="成长档案头图">
   </div>
   <div class="content-pad"><div class="container profile-layout">
-    <aside class="aside-box"><strong>选择孩子</strong><div class="child-list">${state.children.map(c=>`<button class="child-btn ${c.id===child.id?'active':''}" data-child="${c.id}">${esc(c.name)}</button>`).join('')}</div></aside>
+    <aside class="aside-box"><strong>选择孩子</strong><div class="child-list">${eligibleChildren.map(c=>`<button class="child-btn ${c.id===child.id?'active':''}" data-child="${c.id}">${esc(c.name)}</button>`).join('')}</div></aside>
     <section class="main-box"><div class="profile-head"><img class="avatar" src="${avatarOf(child)}" alt=""><div><h2 style="margin:0 0 6px">${esc(child.name)}</h2><div class="meta">个人成长记录</div></div></div>
       <div class="stat-grid"><div class="stat">累计积分<b>${total}</b></div><div class="stat">参与活动<b>${acts}</b></div><div class="stat">积分记录<b>${entries.length}</b></div></div>
       <h3>积分流水</h3><div class="timeline">${entries.length?entries.map(e=>{const a=byId(state.activities,e.activityId); return `<div class="event"><strong>${e.points>=0?'+':''}${displayScore(e.points)} 分 · ${esc(e.reason||'活动积分记录')}</strong><div>${esc(a?.title||'未命名活动')}</div><div class="meta">${fmtDate(e.date)}${e.operator?' · 录入：'+esc(e.operator):''}</div></div>`}).join(''):`<div class="empty"><img src="assets/loading_photo.png" alt=""><div>还没有成长记录</div></div>`}</div>
@@ -129,7 +130,7 @@ async function refreshCloudIfChanged(){
     state.activities=data.activities;
     state.ledger=data.ledger;
     if(!state.activities.some(a=>a.id===state.selectedActivity))state.selectedActivity=state.activities[0]?.id||null;
-    if(!state.children.some(a=>a.id===state.selectedChild))state.selectedChild=state.children[0]?.id||null;
+    if(!state.children.some(a=>a.id===state.selectedChild && a.participant_type!=="university_volunteer"))state.selectedChild=state.children.find(c=>c.participant_type!=="university_volunteer")?.id||null;
     render();
     const search=$('#searchInput');
     if(search&&query){search.value=query;search.dispatchEvent(new Event('input'));}
