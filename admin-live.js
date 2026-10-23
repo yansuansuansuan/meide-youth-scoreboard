@@ -20,6 +20,10 @@
     if(error) throw error;
     return !!data;
   }
+  function syncSelectedActivityDate(){
+    const selected=activities.find(a=>a.id===$("activitySelect").value);
+    if(selected?.date) $("scoreDate").value=selected.date;
+  }
   async function refreshLists() {
     const [kids,acts]=await Promise.all([
       db.from("meide_children").select("id,name,active,participant_type").order("created_at",{ascending:true}),
@@ -32,6 +36,7 @@
     filterChildren();
     options($("activitySelect"),activities,a=>(a.date||"日期待补")+" · "+a.title);
     $("activitySelect").disabled=!activities.length;
+    syncSelectedActivityDate();
   }
   function filterChildren(){
     const term=$("childSearch").value.trim();
@@ -60,10 +65,10 @@
         if(!confirm("确定撤销这条积分记录？相应分数会从榜单中扣回。")) return;
         remove.disabled=true;
         try {
-          const {error}=await db.from("meide_ledger").delete().eq("id",record.id);
+          const {error}=await db.rpc("meide_retract_score",{p_ledger_id:record.id});
           if(error) throw error;
-          showStatus("记录已撤销，公开积分已同步更新。",true);
-          await refreshRecords();
+          showStatus("记录已撤销，公开积分已同步更新。如果是签到表导入记录，可在待核对区重新确认。",true);
+          await Promise.all([refreshRecords(),refreshReview()]);
         } catch(e) {showStatus("撤销失败："+e.message); remove.disabled=false;}
       });
       line.append(content,remove);target.append(line);
@@ -176,6 +181,7 @@
   }
   function initForms(){
     $("childSearch").addEventListener("input",filterChildren);
+    $("activitySelect").addEventListener("change",syncSelectedActivityDate);
     $("loginForm").addEventListener("submit",e=>{e.preventDefault();transact(e.currentTarget,async()=>{
       const {data,error}=await db.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});
       if(error) throw error;
@@ -189,7 +195,7 @@
     $("childForm").addEventListener("submit",e=>{e.preventDefault();transact(e.currentTarget,async()=>{
       const name=$("childName").value.trim();
       if(!name) throw new Error("请输入姓名或昵称");
-      if(children.some(c=>c.name===name)) throw new Error("名单中已存在同名记录，请核对后再添加");
+      if(children.some(c=>c.name===name && (c.participant_type||"child")===$("participantType").value)) throw new Error("该参与者类别已经存在同名记录，请核对后再添加");
       const {error}=await db.from("meide_children").insert({id:"c_"+crypto.randomUUID(),name,active:true,participant_type:$("participantType").value});
       if(error) throw error;
       $("childName").value="";
