@@ -8,34 +8,34 @@ const hashCode=s=>[...String(s)].reduce((a,c)=>((a<<5)-a)+c.charCodeAt(0)|0,0);
 const byId=(arr,id)=>arr.find(x=>x.id===id);
 function toast(msg){const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600)}
 async function loadData(){
-  // 数据库未配置前继续读取原有静态演示数据；配置后只用云端积分数据。
-  const [gallery,settings]=await Promise.all(['gallery','settings'].map(
-    name=>fetch('data/'+name+'.json?'+Date.now()).then(r=>{if(!r.ok)throw new Error(name+' 加载失败');return r.json()})
-  ));
-  let scoreData;
-  if(window.MeideCloud && window.MeideCloud.configured()){
-    scoreData=await window.MeideCloud.loadPublic();
-  }else{
-    const [children,activities,ledger]=await Promise.all(['children','activities','ledger'].map(
-      name=>fetch('data/'+name+'.json?'+Date.now()).then(r=>{if(!r.ok)throw new Error(name+' 加载失败');return r.json()})
-    ));
-    scoreData={children,activities,ledger};
-  }
-  state.children=scoreData.children;
-  state.activities=scoreData.activities;
-  state.ledger=scoreData.ledger;
-  state.gallery=gallery;
-  state.settings=settings;
-  if(!state.activities.some(a=>a.id===state.selectedActivity)) state.selectedActivity=state.activities[0]?.id||null;
-  if(!state.children.some(c=>c.id===state.selectedChild)) state.selectedChild=state.children[0]?.id||null;
+  // 实际积分以云端数据库为准，不回退到旧的 JSON。
+  if(!window.MeideCloud?.configured())throw new Error('积分服务尚未配置');
+  const [live,gallery,settings]=await Promise.all([
+    window.MeideCloud.loadPublic(),
+    fetch('data/gallery.json').then(r=>{if(!r.ok)throw Error('活动相册加载失败');return r.json()}),
+    fetch('data/settings.json').then(r=>{if(!r.ok)throw Error('网站配置加载失败');return r.json()})
+  ]);
+  state.children=live.children; state.activities=live.activities; state.ledger=live.ledger;
+  state.gallery=gallery; state.settings=settings;
+  if(!state.activities.some(a=>a.id===state.selectedActivity))state.selectedActivity=state.activities[0]?.id||null;
+  if(!state.children.some(c=>c.id===state.selectedChild))state.selectedChild=state.children[0]?.id||null;
 }
 
+const displayScore=x=>String(Number(Number(x).toFixed(2)));
 function totals(activityId=null){
   const rows=state.children.filter(c=>c.active!==false).map(c=>({child:c,points:0,activities:new Set(),count:0}));
   const map=new Map(rows.map(r=>[r.child.id,r]));
-  state.ledger.forEach(l=>{if(activityId && l.activityId!==activityId) return; const r=map.get(l.childId); if(!r) return; r.points+=Number(l.points)||0; r.activities.add(l.activityId); r.count++;});
-  return rows.map(r=>({...r,activities:r.activities.size})).sort((a,b)=>b.points-a.points||a.child.name.localeCompare(b.child.name,'zh-CN'));
+  state.ledger.forEach(l=>{
+    if(activityId && l.activityId!==activityId)return;
+    const r=map.get(l.childId); if(!r)return;
+    r.points+=Number(l.points)||0; r.activities.add(l.activityId); r.count++;
+  });
+  // 只有真正参与过此活动的儿童才出现在活动榜，含已确认的 0 分记录。
+  return rows.filter(r=>r.count>0).map(r=>({...r,points:Number(r.points.toFixed(2)),activities:r.activities.size}))
+    .sort((a,b)=>b.points-a.points||a.child.name.localeCompare(b.child.name,'zh-CN'));
 }
+function rankAt(rows,i){return rows.findIndex(r=>r.points===rows[i].points)+1;}
+
 function homePage(){return `
 <section class="home-hero">
   <div class="banner-wrap ranking-hero home-banner">
@@ -71,7 +71,7 @@ function rankingPage(kind='total'){
       <div class="ranking-card">
         <div class="ranking-toolbar-top ${isActivity?'activity':''}">
           ${isActivity?`<select id="actSel" class="select activity-select">${state.activities.map(a=>`<option value="${a.id}" ${a.id===activityId?'selected':''}>${esc((fmtDate(a.date)||'日期待补')+' '+a.title)}</option>`).join('')}</select>`:''}
-          ${isActivity?`<div class="activity-meta-line">${esc(activityLabel)}</div>`:`<div class="activity-meta-line total-meta-line">汇总全部活动积分流水</div>`}
+          ${isActivity?`<div class="activity-meta-line">${esc(activityLabel)}</div>`:`<div class="activity-meta-line total-meta-line">汇总全部已确认活动积分，与活动榜自动同步</div>`}
         </div>
         ${podiumHtml(rows.slice(0,3))}
         <div class="search-row"><input id="searchInput" class="search long-search" placeholder="搜索孩子姓名"></div>
@@ -80,8 +80,12 @@ function rankingPage(kind='total'){
     </div>
   </section>
   </div>`}
-function podiumHtml(rows){const order=[1,0,2],cls=['second','first','third']; return `<div class="podium">${order.map((idx,i)=>{const r=rows[idx]; if(!r)return '<div></div>'; return `<div class="podium-item ${cls[i]}"><div class="medal">${idx+1}</div><img class="avatar" src="${avatarOf(r.child)}" alt=""><strong>${esc(r.child.name)}</strong><div class="p-score">${r.points} 分</div><div class="p-meta">参与 ${r.activities} 场活动</div></div>`}).join('')}</div>`}
-function tableHtml(rows){ if(!rows.length) return `<div class="empty"><img src="assets/no_photo.png" alt=""><div>暂时还没有积分记录</div></div>`; return `<table class="rank-table"><thead><tr><th>排名</th><th>姓名</th><th>参与活动</th><th>积分</th></tr></thead><tbody>${rows.map((r,i)=>`<tr data-name="${esc(r.child.name)}"><td><span class="rank-num">${String(i+1).padStart(2,'0')}</span></td><td>${esc(r.child.name)}</td><td>参加 ${r.activities} 场</td><td class="score">${r.points} 分</td></tr>`).join('')}</tbody></table>`}
+function podiumHtml(rows){const order=[1,0,2],cls=['second','first','third']; return `<div class="podium">${order.map((idx,i)=>{const r=rows[idx]; if(!r)return '<div></div>'; return `<div class="podium-item ${cls[i]}"><div class="medal">${rankAt(rows,idx)}</div><img class="avatar" src="${avatarOf(r.child)}" alt=""><strong>${esc(r.child.name)}</strong><div class="p-score">${displayScore(r.points)} 分</div><div class="p-meta">参与 ${r.activities} 场活动</div></div>`}).join('')}</div>`}
+function tableHtml(rows){
+  if(!rows.length)return '<div class="empty">暂无已确认的积分记录</div>';
+  return `<table class="rank-table"><thead><tr><th>排名</th><th>姓名</th><th>参与活动</th><th>积分</th></tr></thead><tbody>${rows.map((r,i)=>`<tr data-name="${esc(r.child.name)}"><td><span class="rank-num">${String(rankAt(rows,i)).padStart(2,'0')}</span></td><td>${esc(r.child.name)}</td><td>参加 ${r.activities} 场</td><td class="score">${displayScore(r.points)} 分</td></tr>`).join('')}</tbody></table>`;
+}
+
 function profilePage(){const child=byId(state.children,state.selectedChild)||state.children[0]; if(!child)return '<section class="content-pad"><div class="container"><div class="card" style="text-align:center;padding:50px 20px"><h2>成长档案尚未建立</h2><p>管理员添加第一位孩子后，成长档案就会在这里显示。</p></div></div></section>'; const entries=state.ledger.filter(x=>x.childId===child.id).sort((a,b)=>String(b.date).localeCompare(String(a.date))); const total=entries.reduce((s,e)=>s+(+e.points||0),0); const acts=new Set(entries.map(x=>x.activityId)).size; return `
 <section>
   <div class="banner-wrap ranking-hero profile-hero">
@@ -92,12 +96,16 @@ function profilePage(){const child=byId(state.children,state.selectedChild)||sta
     <aside class="aside-box"><strong>选择孩子</strong><div class="child-list">${state.children.map(c=>`<button class="child-btn ${c.id===child.id?'active':''}" data-child="${c.id}">${esc(c.name)}</button>`).join('')}</div></aside>
     <section class="main-box"><div class="profile-head"><img class="avatar" src="${avatarOf(child)}" alt=""><div><h2 style="margin:0 0 6px">${esc(child.name)}</h2><div class="meta">个人成长记录</div></div></div>
       <div class="stat-grid"><div class="stat">累计积分<b>${total}</b></div><div class="stat">参与活动<b>${acts}</b></div><div class="stat">积分记录<b>${entries.length}</b></div></div>
-      <h3>积分流水</h3><div class="timeline">${entries.length?entries.map(e=>{const a=byId(state.activities,e.activityId); return `<div class="event"><strong>${e.points>=0?'+':''}${e.points} 分 · ${esc(e.reason||'活动积分记录')}</strong><div>${esc(a?.title||'未命名活动')}</div><div class="meta">${fmtDate(e.date)}${e.operator?' · 录入：'+esc(e.operator):''}</div></div>`}).join(''):`<div class="empty"><img src="assets/loading_photo.png" alt=""><div>还没有成长记录</div></div>`}</div>
+      <h3>积分流水</h3><div class="timeline">${entries.length?entries.map(e=>{const a=byId(state.activities,e.activityId); return `<div class="event"><strong>${e.points>=0?'+':''}${displayScore(e.points)} 分 · ${esc(e.reason||'活动积分记录')}</strong><div>${esc(a?.title||'未命名活动')}</div><div class="meta">${fmtDate(e.date)}${e.operator?' · 录入：'+esc(e.operator):''}</div></div>`}).join(''):`<div class="empty"><img src="assets/loading_photo.png" alt=""><div>还没有成长记录</div></div>`}</div>
     </section>
   </div></div>
 </section>`}
 function introPage(){return `<section><div class="banner-wrap ranking-hero"><img class="banner-desktop" src="assets/intro_head.jpg" alt="系列活动介绍"><img class="banner-mobile" src="assets/intro_head.jpg" alt="系列活动介绍"></div></section><div class="content-pad"><div class="container intro-grid"><article class="card"><h2>什么是美德少年成长积分榜？</h2><p>这是一个用于记录系列活动参与情况的成长展示平台。每位孩子参加活动、完成任务、展现合作与责任，都会以“积分流水”的方式沉淀下来，最终自动汇总到总榜和活动榜中。</p></article><div class="point-list"><div class="point"><b>🌱 长期积累</b><div class="meta">每场活动积分自动汇总到总榜。</div></div><div class="point"><b>🏅 活动展示</b><div class="meta">每一场活动都能单独生成活动榜。</div></div><div class="point"><b>📒 成长档案</b><div class="meta">查看单个孩子的参与与积分流水。</div></div><div class="point"><b>📷 往期精彩</b><div class="meta">活动结束后上传精选照片长期保留。</div></div></div></div></div></section>`}
-function galleryPage(){return `<div class="gallery-page"><section><div class="banner-wrap ranking-hero"><img class="banner-desktop" src="assets/gallery_head.jpg" alt="往期精彩"><img class="banner-mobile" src="assets/gallery_head.jpg" alt="往期精彩"></div></section><div class="content-pad"><div class="container"><div class="gallery-grid">${(state.gallery.length?state.gallery:[{title:'活动相册待更新',date:'',cover:'assets/photo_placeholder.png',desc:'管理员上传精选照片后，会在这里自动显示。'}]).map(g=>`<article class="photo-card"><div class="photo-thumb"><img src="${g.cover||'assets/photo_placeholder.png'}" alt=""></div><div class="photo-body"><h3>${esc(g.title)}</h3><p>${g.date?fmtDate(g.date)+' · ':''}${esc(g.desc||'活动精选照片')}</p></div></article>`).join('')}</div></div></div></div>`}
+function galleryPage(){
+ const realPhotos=state.gallery.filter(g=>g&&g.cover&&!g.cover.includes('placeholder'));
+ return `<div class="gallery-page"><section><div class="banner-wrap ranking-hero"><img class="banner-desktop" src="assets/gallery_head.jpg" alt="往期精彩"><img class="banner-mobile" src="assets/gallery_head.jpg" alt="往期精彩"></div></section><div class="content-pad"><div class="container">${realPhotos.length?`<div class="gallery-grid">${realPhotos.map(g=>`<article class="photo-card"><div class="photo-thumb"><img src="${esc(g.cover)}" alt=""></div><div class="photo-body"><h3>${esc(g.title||'活动照片')}</h3><p>${g.date?fmtDate(g.date)+' · ':''}${esc(g.desc||'')}</p></div></article>`).join('')}</div>`:'<div class="card" style="text-align:center;padding:42px 18px">暂无已发布的活动照片</div>'}</div></div></div>`;
+}
+
 function signupPage(){return `<div class="signup-page"><section><div class="banner-wrap ranking-hero"><img class="banner-desktop" src="assets/signup_head.jpg" alt="报名入口"><img class="banner-mobile" src="assets/signup_head.jpg" alt="报名入口"></div></section><div class="content-pad"><div class="container"><div class="card"><div class="notice"><strong>活动通知</strong><p class="meta">${esc(state.settings.announcement||'暂无新的活动通知')}</p></div><div style="height:18px"></div><h2>当前报名入口</h2><div class="link-row">${state.settings.registrationUrl?`<a class="btn btn-primary" target="_blank" rel="noopener" href="${esc(state.settings.registrationUrl)}">打开报名推文</a><button class="btn btn-ghost" data-copy="${esc(state.settings.registrationUrl)}">复制链接</button>`:'<span class="meta">当前暂无报名链接</span>'}</div><hr style="border:0;border-top:1px solid var(--line);margin:26px 0"><h2>喔图直播</h2><div class="link-row">${state.settings.photoLiveUrl?`<a class="btn btn-green" target="_blank" rel="noopener" href="${esc(state.settings.photoLiveUrl)}">打开喔图直播</a><button class="btn btn-ghost" data-copy="${esc(state.settings.photoLiveUrl)}">复制链接</button>`:'<span class="meta">当前暂无喔图直播链接</span>'}</div></div></div></div></section></div>`}
 function bindPage(routeName){
   $$('.nav a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')===`#/${routeName}`));
