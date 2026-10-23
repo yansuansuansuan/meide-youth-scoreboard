@@ -30,8 +30,8 @@ function totals(activityId=null){
     const r=map.get(l.childId); if(!r)return;
     r.points+=Number(l.points)||0; r.activities.add(l.activityId); r.count++;
   });
-  // 只有真正参与过此活动的儿童才出现在活动榜，含已确认的 0 分记录。
-  return rows.filter(r=>r.count>0).map(r=>({...r,points:Number(r.points.toFixed(2)),activities:r.activities.size}))
+  // 榜单只收录累计积分大于 0 的符合资格的儿童；0 分仍保留为后台原始记录。
+  return rows.filter(r=>r.count>0 && r.points>0).map(r=>({...r,points:Number(r.points.toFixed(2)),activities:r.activities.size}))
     .sort((a,b)=>b.points-a.points||a.child.name.localeCompare(b.child.name,'zh-CN'));
 }
 function rankAt(rows,i){return rows.findIndex(r=>r.points===rows[i].points)+1;}
