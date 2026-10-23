@@ -63,6 +63,10 @@
             <h2>新增孩子</h2>
             <form id="childForm" class="workform">
               <label>姓名或展示昵称<input id="childName" maxlength="40" required></label>
+              <label>参与者类型<select id="participantType" required>
+                <option value="child" selected>儿童（参加美德少年积分榜）</option>
+                <option value="university_volunteer">大学生志愿者（不参与积分榜）</option>
+              </select></label>
               <button class="btn btn-secondary" type="submit">添加到名单</button>
             </form>
           </div>
