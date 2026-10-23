@@ -155,3 +155,17 @@ img{display:block;max-width:100%}
   .footer-desktop{display:none}
   .footer-mobile{display:block;width:100%;height:auto;object-fit:contain}
 }
+
+/* --- profile name-search only --- */
+.profile-search-layout{max-width:860px;margin-inline:auto;display:flex;flex-direction:column;gap:20px;min-height:320px}
+.profile-search-form{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:22px}
+.profile-search-label{display:block;font-size:18px;font-weight:700;margin-bottom:14px;color:var(--text)}
+.profile-search-control{display:flex;align-items:center;position:relative;border:1px solid #e7d7b9;border-radius:15px;background:#fffdf8;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.profile-search-control:focus-within{border-color:#8bb642;box-shadow:0 0 0 3px rgba(139,182,66,.12)}
+.profile-search-control input.search{flex:1;min-width:0;width:100%;height:54px;border:0;border-radius:0;outline:0;background:transparent;font-size:16px;box-shadow:none}
+.profile-search-control .profile-search-submit{border:0;background:#8fba4c;color:#fff;font-size:30px;line-height:1;min-width:58px;min-height:54px;cursor:pointer;display:grid;place-items:center}
+.profile-search-submit:hover{background:#7ba83c}
+.profile-search-submit:focus-visible{outline:3px solid #3d711f;outline-offset:-4px}
+.profile-search-layout #profileResult .main-box{width:100%}
+.profile-search-empty{background:#fff;border:1px dashed #e6dbbf;border-radius:20px;padding:38px 20px;text-align:center;font-size:16px;color:var(--sub);line-height:1.8}
+@media(max-width:650px){.profile-search-layout{gap:14px}.profile-search-form{padding:16px;border-radius:18px}.profile-search-label{font-size:17px}.profile-search-empty{padding:28px 16px}.profile-search-control .profile-search-submit{min-width:55px}}
