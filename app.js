@@ -70,7 +70,6 @@ function rankingPage(kind='total'){
     </div>
     <div class="ranking-bg">
       <div class="ranking-card">
-        ${state.dataSource==='snapshot'?'<div style="padding:12px 18px;margin:12px 12px 0;border:1px solid #e9dbb6;border-radius:12px;background:#fff9e9;font-size:13px;color:#856c3c;line-height:1.55;">当前展示已同步的榜单备份（更新于 '+esc(state.lastSyncedAt?new Date(state.lastSyncedAt).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}):'最近一次同步')+'）。实时连接暂不可用，新积分可能稍后显示。</div>':''}
         <div class="ranking-toolbar-top ${isActivity?'activity':''}">
           ${isActivity?`<select id="actSel" class="select activity-select">${state.activities.map(a=>`<option value="${a.id}" ${a.id===activityId?'selected':''}>${esc((fmtDate(a.date)||'日期待补')+' '+a.title)}</option>`).join('')}</select>`:''}
           ${isActivity?`<div class="activity-meta-line">${esc(activityLabel)}</div>`:`<div class="activity-meta-line total-meta-line">汇总全部已确认活动积分，与活动榜自动同步</div>`}
