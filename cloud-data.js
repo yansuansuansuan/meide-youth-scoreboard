@@ -28,7 +28,7 @@
   }
   async function loadPublic() {
     const [children,activities,scores] = await Promise.all([
-      allRows("meide_children","id,name,avatar,active"),
+      allRows("meide_children","id,name,avatar,active,participant_type"),
       allRows("meide_activities","id,title,date,status"),
       allRows("meide_public_scores","id,child_id,activity_id,points,date")
     ]);
