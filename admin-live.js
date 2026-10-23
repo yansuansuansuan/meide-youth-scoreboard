@@ -30,7 +30,7 @@
     children=kids.data||[];
     activities=acts.data||[];
     filterChildren();
-    options($("activitySelect"),activities,a=>a.date+" · "+a.title);
+    options($("activitySelect"),activities,a=>(a.date||"日期待补")+" · "+a.title);
     $("activitySelect").disabled=!activities.length;
   }
   function filterChildren(){
@@ -69,6 +69,58 @@
       line.append(content,remove);target.append(line);
     });
   }
+
+  async function refreshReview() {
+    const {data,error}=await db.from("meide_import_review")
+      .select("id,activity_id,source_row,raw_name,score,score_text,review_note")
+      .eq("status","pending").order("activity_id",{ascending:true}).order("source_row",{ascending:true});
+    if(error) throw error;
+    const wrap=$("reviewRecords"); if(!wrap)return;
+    wrap.replaceChildren();
+    const rows=data||[];
+    if(!rows.length){
+      const p=document.createElement("p"); p.className="hint";
+      p.textContent="签到表已经全部核对完毕。";wrap.append(p);return;
+    }
+    const count=document.createElement("p");count.className="hint";
+    count.textContent="尚有 "+rows.length+" 行待核对（已录入的记录不会重复出现）";
+    wrap.append(count);
+    rows.forEach(row=>{
+      const line=document.createElement("div");
+      line.className="workform";
+      line.style.cssText="padding:16px 0;border-bottom:1px solid #efe6d1;gap:9px";
+      const title=document.createElement("strong");
+      title.textContent=(row.activity_id==="meide-signin-01"?"第一场":"第二场")+" · 签到表第 "+row.source_row+" 行";
+      const nameLabel=document.createElement("label");nameLabel.textContent="核对姓名";
+      const name=document.createElement("input");name.value=row.raw_name||"";name.maxLength=40;nameLabel.append(name);
+      const ptsLabel=document.createElement("label");ptsLabel.textContent="核对积分（空白表示原表未填写）";
+      const pts=document.createElement("input");pts.type="number";pts.step="0.01";
+      pts.min="-10000";pts.max="10000";pts.value=row.score==null?"":String(row.score);ptsLabel.append(pts);
+      const note=document.createElement("small");note.className="hint";
+      note.textContent="手写原文："+(row.score_text||"无")+"；"+(row.review_note||"请核对");
+      const btn=document.createElement("button");btn.type="button";btn.className="btn btn-green";
+      btn.textContent="核对并发布到积分榜";
+      btn.addEventListener("click",async()=>{
+        const verifiedName=name.value.trim();
+        if(!verifiedName||/待核|×|？/.test(verifiedName)){showStatus("请先把模糊姓名修改为已核对的准确姓名。");return;}
+        const pointText=pts.value.trim();
+        const score=pointText===""?null:Number(pointText);
+        if(score!==null&&(!Number.isFinite(score)||Math.abs(score)>10000||Math.abs(score-Math.round(score*100)/100)>1e-8)){
+          showStatus("分数必须在 ±10000 之间，最多两位小数。");return;
+        }
+        if(!confirm("确认第 "+row.source_row+" 行姓名为「"+verifiedName+"」、积分为「"+(score===null?"未填写":score)+"」并发布？"))return;
+        btn.disabled=true;
+        try{
+          const {error}=await db.rpc("meide_confirm_import",{p_row_id:row.id,p_name:verifiedName,p_points:score});
+          if(error)throw error;
+          await Promise.all([refreshLists(),refreshRecords(),refreshReview()]);
+          showStatus("核对成功，已更新云端名单与榜单。",true);
+        }catch(e){showStatus("核对未保存："+e.message);btn.disabled=false;}
+      });
+      line.append(title,nameLabel,ptsLabel,note,btn);
+      wrap.append(line);
+    });
+  }
   async function authorize(user){
     const allowed=await isAdmin(user);
     if(!allowed){
@@ -83,6 +135,7 @@
     $("activityDate").value=today();
     await refreshLists();
     await refreshRecords();
+    await refreshReview();
     showStatus("数据库连接正常。保存积分后，网站刷新即可看到最新榜单。",true);
   }
   async function transact(form,callback){
@@ -124,7 +177,7 @@
     $("scoreForm").addEventListener("submit",e=>{e.preventDefault();transact(e.currentTarget,async()=>{
       if(!currentUser) throw new Error("登录已失效，请重新登录");
       const points=Number($("points").value);
-      if(!Number.isInteger(points)||points===0||Math.abs(points)>10000) throw new Error("积分必须是 -10000 至 10000 之间的非零整数");
+      if(!Number.isFinite(points)||Math.abs(points)>10000||Math.abs(points-Math.round(points*100)/100)>1e-8) throw new Error("积分应为 -10000 至 10000 之间且最多两位小数");
       const child_id=$("childSelect").value,activity_id=$("activitySelect").value;
       if(!child_id||!activity_id) throw new Error("请先添加孩子和活动");
       const reason=$("reason").value.trim(),operator=$("operator").value.trim(),date=$("scoreDate").value;
