@@ -17,6 +17,7 @@ async function loadData(){
   ]);
   state.children=live.children; state.activities=live.activities; state.ledger=live.ledger;
   state.gallery=gallery; state.settings=settings;
+  state.dataSource=live.source||'live'; state.lastSyncedAt=live.updatedAt||null;
   if(!state.activities.some(a=>a.id===state.selectedActivity))state.selectedActivity=state.activities[0]?.id||null;
   if(!state.children.some(c=>c.id===state.selectedChild))state.selectedChild=state.children[0]?.id||null;
 }
@@ -69,6 +70,7 @@ function rankingPage(kind='total'){
     </div>
     <div class="ranking-bg">
       <div class="ranking-card">
+        ${state.dataSource==='snapshot'?'<div style="padding:12px 18px;margin:12px 12px 0;border:1px solid #e9dbb6;border-radius:12px;background:#fff9e9;font-size:13px;color:#856c3c;line-height:1.55;">当前展示已同步的榜单备份（更新于 '+esc(state.lastSyncedAt?new Date(state.lastSyncedAt).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}):'最近一次同步')+'）。实时连接暂不可用，新积分可能稍后显示。</div>':''}
         <div class="ranking-toolbar-top ${isActivity?'activity':''}">
           ${isActivity?`<select id="actSel" class="select activity-select">${state.activities.map(a=>`<option value="${a.id}" ${a.id===activityId?'selected':''}>${esc((fmtDate(a.date)||'日期待补')+' '+a.title)}</option>`).join('')}</select>`:''}
           ${isActivity?`<div class="activity-meta-line">${esc(activityLabel)}</div>`:`<div class="activity-meta-line total-meta-line">汇总全部已确认活动积分，与活动榜自动同步</div>`}
@@ -122,13 +124,15 @@ async function refreshCloudIfChanged(){
   const route=(location.hash||'#/home').replace(/^#\//,'');
   if(!['total','activity','profile'].includes(route)) return;
   try {
-    const data=await window.MeideCloud.loadPublic();
-    const previous=JSON.stringify([state.children,state.activities,state.ledger]);
-    if(JSON.stringify([data.children,data.activities,data.ledger])===previous) return;
+    const data=await window.MeideCloud.loadPublic({preferLive:true,timeoutMs:4500});
+    const previous=JSON.stringify([state.children,state.activities,state.ledger,state.dataSource,state.lastSyncedAt]);
+    if(JSON.stringify([data.children,data.activities,data.ledger,data.source,data.updatedAt])===previous) return;
     const y=window.scrollY, query=$('#searchInput')?.value||'';
     state.children=data.children;
     state.activities=data.activities;
     state.ledger=data.ledger;
+    state.dataSource=data.source||"live";
+    state.lastSyncedAt=data.updatedAt||null;
     if(!state.activities.some(a=>a.id===state.selectedActivity))state.selectedActivity=state.activities[0]?.id||null;
     if(!state.children.some(a=>a.id===state.selectedChild && a.participant_type!=="university_volunteer"))state.selectedChild=state.children.find(c=>c.participant_type!=="university_volunteer")?.id||null;
     render();
@@ -148,6 +152,7 @@ document.addEventListener('DOMContentLoaded', async()=>{
     // Supabase Postgres Changes: 数据保存后主动通知榜单刷新。
     // 备用轮询保留，网络断开或客户端未收到事件时仍可自动恢复。
     try {
+      if(!window.supabase?.createClient)throw new Error("公开网页无需额外 SDK，使用轮询同步");
       window.MeideCloud.getClient()
         .channel('meide-scoreboard-public-updates')
         .on('postgres_changes',{event:'*',schema:'public',table:'meide_public_scores'},()=>{void refreshCloudIfChanged();})
@@ -155,6 +160,7 @@ document.addEventListener('DOMContentLoaded', async()=>{
         .on('postgres_changes',{event:'*',schema:'public',table:'meide_activities'},()=>{void refreshCloudIfChanged();})
         .subscribe();
     } catch(e){console.warn('云端实时订阅暂不可用，使用定时刷新',e);}
+    void refreshCloudIfChanged();
     setInterval(refreshCloudIfChanged,20000);
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshCloudIfChanged();});
     window.addEventListener('hashchange',()=>{void refreshCloudIfChanged();});
