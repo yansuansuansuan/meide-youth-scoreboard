@@ -34,7 +34,12 @@
     ]);
     return {
       children,
-      activities: activities.sort((a,b)=>String(b.date).localeCompare(String(a.date))),
+      activities: activities.sort((a,b)=> {
+        if(a.date && b.date) return String(b.date).localeCompare(String(a.date));
+        if(a.date) return -1;
+        if(b.date) return 1;
+        return String(b.id).localeCompare(String(a.id));
+      }),
       ledger: scores.map(x=>({id:x.id,childId:x.child_id,activityId:x.activity_id,points:x.points,date:x.date}))
     };
   }
