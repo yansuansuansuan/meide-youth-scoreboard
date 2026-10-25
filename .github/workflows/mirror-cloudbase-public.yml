@@ -1,0 +1,42 @@
+name: Mirror CloudBase public scores for review
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/sync_cloudbase_public.py"
+      - ".github/workflows/mirror-cloudbase-public.yml"
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mirror-meide-cloudbase-public
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Read and validate public CloudBase API
+        run: python3 scripts/sync_cloudbase_public.py
+      - name: Commit changed public data only
+        shell: bash
+        run: |
+          if git diff --quiet -- data/cloudbase-public.json && git ls-files --error-unmatch data/cloudbase-public.json >/dev/null 2>&1; then
+            echo "No changes to mirror"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/cloudbase-public.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Update CloudBase public audit mirror [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
