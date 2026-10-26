@@ -8,136 +8,190 @@
   },
   "children": [
     {
+      "childId": "5c3b4300-2f34-4085-b016-f4b69bc80334",
+      "legacyId": "child_meide-signin-02-row-13",
       "name": "王嘉雯",
       "displayName": "王嘉雯",
       "totalPoints": 60
     },
     {
+      "childId": "67806c8b-d9a2-49a0-bc3a-9780f8a7bc2a",
+      "legacyId": "child_meide-signin-01-row-06",
       "name": "蒋庭",
       "displayName": "蒋庭",
       "totalPoints": 51
     },
     {
+      "childId": "938d7989-7dbf-4943-bb88-f1695241b993",
+      "legacyId": "child_meide-signin-01-row-14",
       "name": "雷笑言",
       "displayName": "雷笑言",
       "totalPoints": 50
     },
     {
+      "childId": "62bca41e-b12f-4565-b4b4-f08c80740261",
+      "legacyId": "child_meide-signin-02-row-07",
       "name": "李思其",
       "displayName": "李思其",
       "totalPoints": 48
     },
     {
+      "childId": "bfeebb1c-53e5-4d17-ab24-5c467287f649",
+      "legacyId": "child_meide-signin-01-row-11",
       "name": "储德清",
       "displayName": "储德清",
       "totalPoints": 36
     },
     {
+      "childId": "99e05fdf-e5e4-4632-abf0-609cf6a71e33",
+      "legacyId": "child_meide-signin-02-row-16",
       "name": "胡雪杨",
       "displayName": "胡雪杨",
       "totalPoints": 35
     },
     {
+      "childId": "8d40012a-0f70-41d1-a0f5-db702b66d089",
+      "legacyId": "child_meide-signin-02-row-08",
       "name": "赵小鱼",
       "displayName": "赵小鱼",
       "totalPoints": 27
     },
     {
+      "childId": "5d572fa0-02e3-4b4b-b242-19e7a3cb76af",
+      "legacyId": "child_meide-signin-01-row-09",
       "name": "丁晞文",
       "displayName": "丁晞文",
       "totalPoints": 24
     },
     {
+      "childId": "4aa16d32-92d8-4e15-91de-ea27dc6c82fb",
+      "legacyId": "child_meide-signin-01-row-07",
       "name": "孔舒妍",
       "displayName": "孔舒妍",
       "totalPoints": 22
     },
     {
+      "childId": "0d7b869f-bbbf-468c-a774-4d5dd9291604",
+      "legacyId": "child_meide-signin-01-row-03",
       "name": "贺筱迪",
       "displayName": "贺筱迪",
       "totalPoints": 20
     },
     {
+      "childId": "8cf30c9b-d21d-4236-b10d-bfd54ba66e27",
+      "legacyId": "child_meide-signin-02-row-04",
       "name": "陈荟萃",
       "displayName": "陈荟萃",
       "totalPoints": 15
     },
     {
+      "childId": "ef534d82-9ffa-4afe-b14a-0b2866ffde27",
+      "legacyId": "child_meide-signin-01-row-02",
       "name": "徐梓妍",
       "displayName": "徐梓妍",
       "totalPoints": 13
     },
     {
+      "childId": "1d6ccd57-5e25-4ba7-bac8-8850c5f2bb6d",
+      "legacyId": "child_meide-signin-01-row-01",
       "name": "徐开智",
       "displayName": "徐开智",
       "totalPoints": 12
     },
     {
+      "childId": "146c0f7b-0b76-4a9f-a55f-8d66b45eaf78",
+      "legacyId": "child_meide-signin-02-row-15",
       "name": "方睿晨",
       "displayName": "方睿晨",
       "totalPoints": 12
     },
     {
+      "childId": "19c5751d-bbf9-4f74-9105-a193b99f54c4",
+      "legacyId": "child_meide-signin-01-row-10",
       "name": "汤嘉泽",
       "displayName": "汤嘉泽",
       "totalPoints": 11
     },
     {
+      "childId": "1010ebfa-fb25-46c0-88eb-6e5b282d3b5e",
+      "legacyId": "child_meide-signin-01-row-15",
       "name": "周筱冉",
       "displayName": "周筱冉",
       "totalPoints": 10
     },
     {
+      "childId": "524578de-a592-4a37-af16-801a696ace4d",
+      "legacyId": "child_meide-signin-01-row-05",
       "name": "杨章溢",
       "displayName": "杨章溢",
       "totalPoints": 10
     },
     {
+      "childId": "618cbb7a-08c8-4cb7-9789-c0af958da472",
+      "legacyId": "child_meide-signin-02-row-05",
       "name": "徐锦翕",
       "displayName": "徐锦翕",
       "totalPoints": 8.5
     },
     {
+      "childId": "2dcc5c10-1c9e-4732-b23d-eec1987c6693",
+      "legacyId": "child_meide-signin-02-row-12",
       "name": "朱希正",
       "displayName": "朱希正",
       "totalPoints": 5
     },
     {
+      "childId": "f7681914-6c2e-45cd-8e4c-50a95d26bb78",
+      "legacyId": "child_meide-signin-01-row-08",
       "name": "秦凡雯",
       "displayName": "秦凡雯",
       "totalPoints": 4
     },
     {
+      "childId": "1bc99654-fa06-4922-8ad9-85cb9ea7e7e5",
+      "legacyId": "child_meide-signin-01-row-20",
       "name": "陈乐心",
       "displayName": "陈乐心",
       "totalPoints": 3
     },
     {
+      "childId": "48a1290c-34b6-4bea-af34-45ef6e824bdb",
+      "legacyId": "child_meide-signin-02-row-06",
       "name": "刘思高",
       "displayName": "刘思高",
       "totalPoints": 1.4
     },
     {
+      "childId": "afc23ba6-f58f-4407-b388-4da7b5ffd43f",
+      "legacyId": "child_meide-signin-02-row-18",
       "name": "涂展赫",
       "displayName": "涂展赫",
       "totalPoints": 0
     },
     {
+      "childId": "a89ee354-7c5e-4454-b105-9d2e87e339a9",
+      "legacyId": "child_meide-signin-02-row-02",
       "name": "尹辰皓",
       "displayName": "尹辰皓",
       "totalPoints": 0
     },
     {
+      "childId": "434d7411-c1de-4c02-886c-05eb092e5599",
+      "legacyId": "child_meide-signin-02-row-03",
       "name": "黄锦霖",
       "displayName": "黄锦霖",
       "totalPoints": 0
     },
     {
+      "childId": "03dc7e4e-4d04-4434-aebd-40efe81dc313",
+      "legacyId": "child_meide-signin-02-row-09",
       "name": "邹艺鸣",
       "displayName": "邹艺鸣",
       "totalPoints": 0
     },
     {
+      "childId": "16e9d055-1768-47e1-ad37-d27af61c48f4",
+      "legacyId": "child_meide-signin-02-row-14",
       "name": "王子杰",
       "displayName": "王子杰",
       "totalPoints": 0
@@ -145,11 +199,15 @@
   ],
   "activities": [
     {
+      "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
+      "legacyId": "meide-signin-02",
       "name": "第二场活动",
       "date": "2026-10-07",
       "status": "closed"
     },
     {
+      "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
+      "legacyId": "meide-signin-01",
       "name": "第一场活动",
       "date": "2026-09-06",
       "status": "closed"
@@ -158,6 +216,7 @@
   "records": [
     {
       "recordId": "54366fb9-ddef-4f65-81e6-af3f862360e4",
+      "legacyId": "ledger_meide-signin-02-row-18",
       "childId": "afc23ba6-f58f-4407-b388-4da7b5ffd43f",
       "childName": "涂展赫",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -168,6 +227,7 @@
     },
     {
       "recordId": "0a7cd51a-4aa6-44d4-9287-f6a08cbc1450",
+      "legacyId": "ledger_meide-signin-02-row-02",
       "childId": "a89ee354-7c5e-4454-b105-9d2e87e339a9",
       "childName": "尹辰皓",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -178,6 +238,7 @@
     },
     {
       "recordId": "dc7e6929-6b5c-484d-adab-c374c902e0fd",
+      "legacyId": "ledger_meide-signin-02-row-03",
       "childId": "434d7411-c1de-4c02-886c-05eb092e5599",
       "childName": "黄锦霖",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -188,6 +249,7 @@
     },
     {
       "recordId": "d6d9f31b-f0fa-4052-aaf0-223bdadb2467",
+      "legacyId": "ledger_meide-signin-02-row-04",
       "childId": "8cf30c9b-d21d-4236-b10d-bfd54ba66e27",
       "childName": "陈荟萃",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -198,6 +260,7 @@
     },
     {
       "recordId": "a9986352-02a8-4932-b142-5c14fa5a1456",
+      "legacyId": "ledger_meide-signin-02-row-05",
       "childId": "618cbb7a-08c8-4cb7-9789-c0af958da472",
       "childName": "徐锦翕",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -208,6 +271,7 @@
     },
     {
       "recordId": "d0c4875d-dbc3-413c-b903-0502bd078b83",
+      "legacyId": "ledger_meide-signin-02-row-06",
       "childId": "48a1290c-34b6-4bea-af34-45ef6e824bdb",
       "childName": "刘思高",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -218,6 +282,7 @@
     },
     {
       "recordId": "5b177f66-248a-4afb-bf97-0a2aa878220a",
+      "legacyId": "ledger_meide-signin-02-row-07",
       "childId": "62bca41e-b12f-4565-b4b4-f08c80740261",
       "childName": "李思其",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -228,6 +293,7 @@
     },
     {
       "recordId": "e7bb9ac7-fef0-405a-8ae1-940b5a7b0f0f",
+      "legacyId": "ledger_meide-signin-02-row-08",
       "childId": "8d40012a-0f70-41d1-a0f5-db702b66d089",
       "childName": "赵小鱼",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -238,6 +304,7 @@
     },
     {
       "recordId": "59900833-0ea6-47ad-98df-b10f3c5e62f2",
+      "legacyId": "ledger_meide-signin-02-row-09",
       "childId": "03dc7e4e-4d04-4434-aebd-40efe81dc313",
       "childName": "邹艺鸣",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -248,6 +315,7 @@
     },
     {
       "recordId": "82a8e039-1c0f-4917-bcea-ae0952be130a",
+      "legacyId": "ledger_meide-signin-02-row-12",
       "childId": "2dcc5c10-1c9e-4732-b23d-eec1987c6693",
       "childName": "朱希正",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -258,6 +326,7 @@
     },
     {
       "recordId": "590a3dbf-9be3-434a-af6d-38de8a97f58b",
+      "legacyId": "ledger_meide-signin-02-row-13",
       "childId": "5c3b4300-2f34-4085-b016-f4b69bc80334",
       "childName": "王嘉雯",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -268,6 +337,7 @@
     },
     {
       "recordId": "461f248e-fc3a-41e5-a6f0-8ba4d2a94a6e",
+      "legacyId": "ledger_meide-signin-02-row-14",
       "childId": "16e9d055-1768-47e1-ad37-d27af61c48f4",
       "childName": "王子杰",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -278,6 +348,7 @@
     },
     {
       "recordId": "782e7530-b36f-4043-a170-74d7417335e8",
+      "legacyId": "ledger_meide-signin-02-row-15",
       "childId": "146c0f7b-0b76-4a9f-a55f-8d66b45eaf78",
       "childName": "方睿晨",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -288,6 +359,7 @@
     },
     {
       "recordId": "19fccfa5-b3c3-4e1b-a1a5-db65cda3a37e",
+      "legacyId": "ledger_meide-signin-02-row-16",
       "childId": "99e05fdf-e5e4-4632-abf0-609cf6a71e33",
       "childName": "胡雪杨",
       "activityId": "ed233681-9e32-4542-875b-644be55f4deb",
@@ -298,6 +370,7 @@
     },
     {
       "recordId": "b1817f37-b6b0-40d0-bd01-0205d953719d",
+      "legacyId": "ledger_meide-signin-01-row-02",
       "childId": "ef534d82-9ffa-4afe-b14a-0b2866ffde27",
       "childName": "徐梓妍",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -308,6 +381,7 @@
     },
     {
       "recordId": "83489d71-7696-46fc-836b-b71a74df20c3",
+      "legacyId": "ledger_meide-signin-01-row-03",
       "childId": "0d7b869f-bbbf-468c-a774-4d5dd9291604",
       "childName": "贺筱迪",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -318,6 +392,7 @@
     },
     {
       "recordId": "ddd8a91c-dbb7-4a40-b3ac-79350de000d3",
+      "legacyId": "ledger_meide-signin-01-row-05",
       "childId": "524578de-a592-4a37-af16-801a696ace4d",
       "childName": "杨章溢",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -328,6 +403,7 @@
     },
     {
       "recordId": "275117a9-2218-4ea0-b5b9-d2b88d36231b",
+      "legacyId": "ledger_meide-signin-01-row-06",
       "childId": "67806c8b-d9a2-49a0-bc3a-9780f8a7bc2a",
       "childName": "蒋庭",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -338,6 +414,7 @@
     },
     {
       "recordId": "4d10c304-337d-4c74-8fd7-ed0fae057dde",
+      "legacyId": "ledger_meide-signin-01-row-07",
       "childId": "4aa16d32-92d8-4e15-91de-ea27dc6c82fb",
       "childName": "孔舒妍",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -348,6 +425,7 @@
     },
     {
       "recordId": "b7955b30-9124-40a9-bf12-235c2ee1734c",
+      "legacyId": "ledger_meide-signin-01-row-08",
       "childId": "f7681914-6c2e-45cd-8e4c-50a95d26bb78",
       "childName": "秦凡雯",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -358,6 +436,7 @@
     },
     {
       "recordId": "be859067-565b-4975-98ce-b2052cf77168",
+      "legacyId": "ledger_meide-signin-01-row-09",
       "childId": "5d572fa0-02e3-4b4b-b242-19e7a3cb76af",
       "childName": "丁晞文",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -368,6 +447,7 @@
     },
     {
       "recordId": "2288aa08-436c-4c04-8335-0ab3e48667ce",
+      "legacyId": "ledger_meide-signin-01-row-10",
       "childId": "19c5751d-bbf9-4f74-9105-a193b99f54c4",
       "childName": "汤嘉泽",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -378,6 +458,7 @@
     },
     {
       "recordId": "c4fe3bc1-9bf8-4e79-a36c-999c50e78899",
+      "legacyId": "ledger_meide-signin-01-row-11",
       "childId": "bfeebb1c-53e5-4d17-ab24-5c467287f649",
       "childName": "储德清",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -388,6 +469,7 @@
     },
     {
       "recordId": "2848f82b-431e-43dc-8f0d-fb17c9bd040f",
+      "legacyId": "ledger_meide-signin-01-row-14",
       "childId": "938d7989-7dbf-4943-bb88-f1695241b993",
       "childName": "雷笑言",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -398,6 +480,7 @@
     },
     {
       "recordId": "2217fe94-a3e8-4eb5-a314-b0d42efb18dd",
+      "legacyId": "ledger_meide-signin-01-row-15",
       "childId": "1010ebfa-fb25-46c0-88eb-6e5b282d3b5e",
       "childName": "周筱冉",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -408,6 +491,7 @@
     },
     {
       "recordId": "9625c92d-6a63-448c-8f61-457b1258dd86",
+      "legacyId": "ledger_meide-signin-01-row-20",
       "childId": "1bc99654-fa06-4922-8ad9-85cb9ea7e7e5",
       "childName": "陈乐心",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
@@ -418,6 +502,7 @@
     },
     {
       "recordId": "02fdd9c7-17df-4e8e-86e7-3d3a89091505",
+      "legacyId": "ledger_meide-signin-01-row-01",
       "childId": "1d6ccd57-5e25-4ba7-bac8-8850c5f2bb6d",
       "childName": "徐开智",
       "activityId": "87af978f-dad5-4297-ba8f-2841289e8f0c",
