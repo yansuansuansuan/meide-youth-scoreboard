@@ -222,19 +222,10 @@ document.addEventListener('DOMContentLoaded', async()=>{
     $('#app').innerHTML='<div class="container" style="padding:44px 20px;text-align:center"><h2>数据暂时无法加载</h2><p>请稍后刷新重试，积分数据并未丢失。</p><button class="btn btn-primary" onclick="location.reload()">重新加载</button></div>';
   }
   if(window.MeideCloud?.configured()) {
-    // Supabase Postgres Changes: 数据保存后主动通知榜单刷新。
-    // 备用轮询保留，网络断开或客户端未收到事件时仍可自动恢复。
-    try {
-      if(!window.supabase?.createClient)throw new Error("公开网页无需额外 SDK，使用轮询同步");
-      window.MeideCloud.getClient()
-        .channel('meide-scoreboard-public-updates')
-        .on('postgres_changes',{event:'*',schema:'public',table:'meide_public_scores'},()=>{void refreshCloudIfChanged();})
-        .on('postgres_changes',{event:'*',schema:'public',table:'meide_children'},()=>{void refreshCloudIfChanged();})
-        .on('postgres_changes',{event:'*',schema:'public',table:'meide_activities'},()=>{void refreshCloudIfChanged();})
-        .subscribe();
-    } catch(e){console.warn('云端实时订阅暂不可用，使用定时刷新',e);}
+    // CloudBase HTTP 只读接口；无须旧 Supabase 的 SDK、订阅或登录态。
+    // 在总榜、活动榜及成长档案每 15 秒自动校验一次最新积分。
     void refreshCloudIfChanged();
-    setInterval(refreshCloudIfChanged,20000);
+    setInterval(refreshCloudIfChanged,15000);
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshCloudIfChanged();});
     window.addEventListener('hashchange',()=>{void refreshCloudIfChanged();});
   }
