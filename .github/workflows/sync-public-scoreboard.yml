@@ -7,9 +7,9 @@ on:
     paths:
       - ".github/workflows/sync-public-scoreboard.yml"
       - "scripts/sync_public_scores.py"
-  schedule:
-    # GitHub may delay scheduled jobs. This is backup refresh, not realtime.
-    - cron: "*/5 * * * *"
+  # Archived legacy Supabase backup. Do not refresh it on a timer now that
+  # CloudBase is the sole active score source. workflow_dispatch keeps a
+  # manual recovery path if a historical snapshot is ever needed.
   workflow_dispatch:
 
 permissions:
