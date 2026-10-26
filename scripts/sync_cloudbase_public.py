@@ -50,12 +50,20 @@ def allowlist(rows, allowed):
 def main():
     overview = request("")
     children = allowlist(fetch_all("children"),
-       ("id","name","displayName","totalPoints"))
+       ("id","childId","legacyId","name","displayName","totalPoints"))
     activities = allowlist(fetch_all("activities"),
-       ("id","name","date","status"))
+       ("id","activityId","legacyId","name","date","status"))
     records = allowlist(fetch_all("records"),
-       ("recordId","childId","childName","activityId","activityName",
+       ("recordId","legacyId","childId","childName","activityId","activityName",
         "activityDate","delta","createdAt"))
+    # Inspect schema-only field names for compatibility; never log children's names.
+    for label, rows in (("children", children), ("activities", activities), ("records", records)):
+        if rows:
+            print("CloudBase public field names (" + label + "):", sorted(rows[0].keys()))
+    if any(not (c.get("legacyId") or c.get("childId") or c.get("id")) for c in children):
+        raise RuntimeError("Public child identifiers missing; refusing unsafe mirror")
+    if any(not (a.get("legacyId") or a.get("activityId") or a.get("id")) for a in activities):
+        raise RuntimeError("Public activity identifiers missing; refusing unsafe mirror")
     totals = overview.get("totals", {})
     # The public API is required to agree with its own pagination.
     for key, rows in (("children", children), ("activities", activities),
