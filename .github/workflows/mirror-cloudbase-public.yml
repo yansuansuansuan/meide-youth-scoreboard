@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: mirror-meide-cloudbase-public
@@ -27,16 +28,36 @@ jobs:
       - name: Read and validate public CloudBase API
         run: python3 scripts/sync_cloudbase_public.py
       - name: Commit changed public data only
+        id: publish
         shell: bash
         run: |
-          if git diff --quiet -- data/cloudbase-public.json && git ls-files --error-unmatch data/cloudbase-public.json >/dev/null 2>&1; then
-            echo "No changes to mirror"
+          git add data/cloudbase-public.json
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changes to public CloudBase mirror"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/cloudbase-public.json
-          git diff --cached --quiet && exit 0
           git commit -m "Update CloudBase public audit mirror [skip ci]"
           git pull --rebase origin main
           git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Deploy updated GitHub Pages mirror
+        if: steps.publish.outputs.changed == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          code=$(curl --location --silent --show-error --output /tmp/cloudbase-pages-build.json \
+            --write-out "%{http_code}" \
+            --request POST "https://api.github.com/repos/$REPOSITORY/pages/builds" \
+            --header "Authorization: Bearer $GH_TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            --header "X-GitHub-Api-Version: 2022-11-28")
+          cat /tmp/cloudbase-pages-build.json
+          if [[ "$code" != "201" && "$code" != "204" ]]; then
+            echo "::warning::GitHub Pages rebuild failed: HTTP $code"
+            exit 1
+          fi
