@@ -2,105 +2,23 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>在线积分管理｜美德少年</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>美德少年 · 管理入口已迁移</title>
+  <meta name="theme-color" content="#88b83f">
   <style>
-    .workwrap{width:min(1120px,calc(100% - 28px));margin:25px auto 70px}
-    .workhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .workcard{background:#fff;border:1px solid #eaddbc;border-radius:20px;padding:22px;margin-top:18px;box-shadow:0 8px 25px rgba(90,67,30,.07)}
-    .workcard h2{margin:0 0 14px}
-    .workgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-    .workform{display:grid;gap:12px}
-    .workform label{display:grid;gap:6px;font-weight:600}
-    .workform input,.workform select{padding:12px;border:1px solid #dccda7;border-radius:12px;background:#fffdfa;min-width:0;width:100%;font-size:16px}
-    .workform .btn{min-height:46px}
-    .hint{color:#806e5a;font-size:14px;line-height:1.7}
-    .status{margin-top:14px;padding:13px 15px;border-radius:12px;background:#fff3d9;color:#6c4b1e}
-    .status.ok{background:#ebf8dc;color:#35651c}
-    .record{padding:10px 0;border-bottom:1px solid #f0e6d4;display:flex;justify-content:space-between;align-items:center;gap:12px}
-    .record div{flex:1;min-width:0}
-    .record small{display:block;color:#837364;margin-top:3px}
-    .btn.small{padding:7px 12px;border-radius:10px;box-shadow:none}
-    [hidden]{display:none!important}
-    @media(max-width:740px){.workgrid{grid-template-columns:1fr}.workcard{padding:16px}}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#f5f7ef;color:#364236;font:16px/1.75 system-ui,-apple-system,"Microsoft YaHei",sans-serif}
+    main{max-width:560px;width:100%;border-radius:20px;background:white;padding:36px 28px;box-shadow:0 12px 40px #30402412}
+    h1{font-size:24px;margin:0 0 12px}p{margin:12px 0}a.button{display:inline-block;padding:11px 24px;border-radius:12px;background:#739d43;color:white;text-decoration:none;font-weight:700;margin:12px 0 0}
+    .tip{font-size:14px;color:#66716a}
   </style>
 </head>
 <body>
-  <header class="topbar"><a class="brand" href="scoreboard-preview.html#/home"><img src="assets/mascot.png" alt="芽芽"><span>美德少年 · 在线积分管理</span></a><a href="scoreboard-preview.html#/home" class="btn btn-ghost">返回网站</a></header>
-  <main class="workwrap">
-    <div class="workhead">
-      <div><h1>积分实时录入</h1><div class="hint">保存即写入数据库，无须下载 JSON 或手动更新 GitHub。</div></div>
-      <button type="button" id="logout" class="btn btn-ghost" hidden>退出登录</button>
-    </div>
-    <div id="status" class="status" role="status" aria-live="polite">正在检查连接...</div>
-    <section id="loginPanel" class="workcard" hidden>
-      <h2>管理员登录</h2>
-      <form id="loginForm" class="workform" style="max-width:440px">
-        <label>管理员邮箱<input id="email" type="email" autocomplete="username" required></label>
-        <label>密码<input id="password" type="password" autocomplete="current-password" required></label>
-        <button class="btn btn-primary" type="submit">登录后台</button>
-      </form>
-      <p class="hint">只有被列入管理员名单的账号可以修改活动和积分；不能在这里自行注册管理员。</p>
-    </section>
-    <section id="dashboard" hidden>
-      <div class="workgrid">
-        <div class="workcard">
-          <h2>新增积分流水</h2>
-          <form id="scoreForm" class="workform">
-            <label>搜索孩子<input id="childSearch" placeholder="输入姓名筛选" autocomplete="off"></label>
-            <label>选择孩子<select id="childSelect" required></select></label>
-            <label>所属活动<select id="activitySelect" required></select></label>
-            <label>积分（可保留两位小数）<input id="points" type="number" step="0.01" min="-10000" max="10000" value="5" required></label>
-            <label>加分原因<input id="reason" maxlength="300" placeholder="例如：完成公益实践" required></label>
-            <label>操作人<input id="operator" maxlength="80" placeholder="例如：活动工作人员" required></label>
-            <label>活动日期<input id="scoreDate" type="date" required></label>
-            <button class="btn btn-green" type="submit">保存积分到数据库</button>
-          </form>
-        </div>
-        <div>
-          <div class="workcard">
-            <h2>新增孩子</h2>
-            <form id="childForm" class="workform">
-              <label>姓名或展示昵称<input id="childName" maxlength="40" required></label>
-              <label>参与者类型<select id="participantType" required>
-                <option value="child" selected>儿童（参加美德少年积分榜）</option>
-                <option value="university_volunteer">大学生志愿者（不参与积分榜）</option>
-              </select></label>
-              <button class="btn btn-secondary" type="submit">添加到名单</button>
-            </form>
-          </div>
-          <div class="workcard">
-            <h2>创建活动</h2>
-            <form id="activityForm" class="workform">
-              <label>活动名称<input id="activityTitle" maxlength="120" required></label>
-              <label>活动日期<input id="activityDate" type="date" required></label>
-              <button class="btn btn-secondary" type="submit">保存活动</button>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div class="workcard">
-        <h2>最近积分记录</h2>
-        <p class="hint">发现录入错误时，可撤销错误记录并重新录入。删除后公开榜单也会同步扣回相应分数。</p>
-        <div id="recentRecords"></div>
-      </div>
-      <details class="workcard" id="secondSignupPanel">
-        <summary style="cursor:pointer;font-weight:700;font-size:1.1rem">10月7日报名名单（点开核对）</summary>
-        <p class="hint">招募名单独立于成长积分榜。报名不等于签到到场；截图中的服务时长也不作为积分。大学生志愿者仅供后台核对，绝不参与美德少年榜单。</p>
-        <p id="secondSignupSummary" class="hint">正在读取名单...</p>
-        <div id="secondSignupRows"></div>
-      </details>
-      <div class="workcard" id="reviewPanel">
-        <h2>手写签到表待核对记录</h2>
-        <p class="hint">共两场签到表，清晰的姓名已录入积分榜；下方是需要再确认姓名或分数的记录。修改后点击“核对并发布”，才会加入正式积分榜。原纸张的联系人号码不在公开页面保存。</p>
-        <div id="reviewRecords"></div>
-      </div>
-    </section>
+  <main>
+    <h1>积分管理入口已迁移</h1>
+    <p>美德少年现在使用腾讯云 CloudBase 作为正式积分数据库。请前往新的积分录入系统管理儿童、活动与积分。</p>
+    <p><a class="button" href="https://meidejifenbang-d4gk1txdi4a1d2342-1515015098.tcloudbaseapp.com/">进入 WorkBuddy 积分录入系统</a></p>
+    <p class="tip">旧 Supabase 数据仍保留备份，但不再作为正式积分写入入口，以防两套数据库记录不一致。</p>
+    <p><a href="./">返回积分榜</a></p>
   </main>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.76.1"></script>
-  <script src="supabase-config.js"></script>
-  <script src="cloud-data.js"></script>
-  <script src="admin-live.js"></script>
 </body>
 </html>
