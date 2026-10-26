@@ -12,10 +12,17 @@ BASE = "https://meidejifenbang-d4gk1txdi4a1d2342.service.tcloudbase.com/public-a
 OUTPUT = pathlib.Path("data/cloudbase-public.json")
 
 def request(path):
+    origin = "https://yansuansuansuan.github.io"
     req = urllib.request.Request(
         BASE + path,
-        headers={"Accept": "application/json", "User-Agent": "MeidePublicDataSync/1.0"})
+        headers={"Accept": "application/json", "User-Agent": "MeidePublicDataSync/1.0",
+                 "Origin": origin})
     with urllib.request.urlopen(req, timeout=25) as response:
+        allowed = response.headers.get("Access-Control-Allow-Origin", "")
+        if path == "":
+            print("CloudBase CORS allowed origin:", repr(allowed))
+        if allowed not in (origin, "*"):
+            raise RuntimeError("CloudBase CORS does not permit the public GitHub Pages origin")
         obj = json.load(response)
     if not isinstance(obj, dict) or obj.get("code") != 0:
         raise RuntimeError("Public API returned invalid or failed response at " + path)
