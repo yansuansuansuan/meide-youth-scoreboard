@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', async()=>{
     console.error('美德少年数据加载失败',e);
     $('#app').innerHTML='<div class="container" style="padding:44px 20px;text-align:center"><h2>数据暂时无法加载</h2><p>请稍后刷新重试，积分数据并未丢失。</p><button class="btn btn-primary" onclick="location.reload()">重新加载</button></div>';
   }
-  if(window.MeideCloud?.configured()) {
+  if(window.MeideCloud?.configured() && window.MeideCloud.liveUpdatesEnabled) {
     // CloudBase HTTP 只读接口；无须旧 Supabase 的 SDK、订阅或登录态。
     // 在总榜、活动榜及成长档案每 15 秒自动校验一次最新积分。
     void refreshCloudIfChanged();
