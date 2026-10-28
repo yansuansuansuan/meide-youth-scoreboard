@@ -5,6 +5,9 @@
   "use strict";
   const API = "https://meidejifenbang-d4gk1txdi4a1d2342.service.tcloudbase.com/public-api";
   const MIRROR = "data/cloudbase-public.json";
+  // Temporary safety switch: PG trial is isolated after running out of free points.
+  // Do not probe PG from visitors until an economical live backend is deployed.
+  const CLOUD_READS_PAUSED = true;
   let cachedMirror = null;
   let mirrorCachedAt = 0;
   let lastLive = null;
@@ -133,6 +136,7 @@
   }
 
   async function loadPublic(options={}) {
+    if (CLOUD_READS_PAUSED) return loadSnapshot();
     if (options.preferLive===false) return loadSnapshot();
     try {
       return await loadLive(options.timeoutMs||4500);
@@ -149,5 +153,5 @@
       }
     }
   }
-  window.MeideCloud={configured,getClient,loadPublic,loadSnapshot,loadLive};
+  window.MeideCloud={configured,getClient,loadPublic,loadSnapshot,loadLive,liveUpdatesEnabled:!CLOUD_READS_PAUSED};
 })();
