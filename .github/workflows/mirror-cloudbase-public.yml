@@ -6,8 +6,9 @@ on:
     paths:
       - "scripts/sync_cloudbase_public.py"
       - ".github/workflows/mirror-cloudbase-public.yml"
-  schedule:
-    - cron: "*/10 * * * *"
+  # PAUSED: CloudBase PG trial is Isolated after resource point depletion.
+  # Frequent automatic reads can re-exhaust its quota upon restoration.
+  # Run manually via workflow_dispatch only after a controlled migration or test.
   workflow_dispatch:
 
 permissions:
